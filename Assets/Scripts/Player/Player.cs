@@ -90,7 +90,7 @@ public class Player : ProjectBehaviour
     int i = 0;
     int j = 0;
 
-    float timeInBetweenPicturePixelDrawn = 0.00002f;
+    float timeInBetweenPicturePixelDrawn = 0.015f;
 
     private void DrawPicture()
     {
@@ -127,7 +127,7 @@ public class Player : ProjectBehaviour
                     DrawPixel(hit, Pixel._PixelColour.White);
                 }
 
-                yield return new WaitForSeconds(timeInBetweenPicturePixelDrawn);
+                yield return new WaitForSecondsRealtime(timeInBetweenPicturePixelDrawn);
             }
         }
 
