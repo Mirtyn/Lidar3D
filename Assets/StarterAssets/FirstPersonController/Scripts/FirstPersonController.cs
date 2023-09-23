@@ -72,7 +72,7 @@ namespace StarterAssets
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
-		private const float _threshold = 0.01f;
+        private const float _threshold = 0.01f;
 
 		private bool IsCurrentDeviceMouse
 		{
@@ -110,22 +110,32 @@ namespace StarterAssets
 			_fallTimeoutDelta = FallTimeout;
 		}
 
+		bool lastValue = true;
+
 		private void Update()
 		{
+            if (Game.CanUseInput != lastValue)
+			{
+				lastValue = Game.CanUseInput;
+
+                if (!Game.CanUseInput)
+                {
+                    _playerInput.DeactivateInput();
+                }
+                else
+                {
+                    _playerInput.ActivateInput();
+                }
+            }
+
 			JumpAndGravity();
 			GroundedCheck();
-			if (Game.CanUseInput)
-			{
-				Move();
-			}
+			Move();
 		}
 
 		private void LateUpdate()
 		{
-			if (Game.CanUseInput)
-			{
-                CameraRotation();
-            }
+            CameraRotation();
         }
 
 		private void GroundedCheck()
@@ -206,50 +216,47 @@ namespace StarterAssets
 
 		private void JumpAndGravity()
 		{
-			if (Game.CanUseInput)
-			{
-				if (Grounded)
-				{
-					// reset the fall timeout timer
-					_fallTimeoutDelta = FallTimeout;
+            if (Grounded)
+            {
+                // reset the fall timeout timer
+                _fallTimeoutDelta = FallTimeout;
 
-					// stop our velocity dropping infinitely when grounded
-					if (_verticalVelocity < 0.0f)
-					{
-						_verticalVelocity = -2f;
-					}
+                // stop our velocity dropping infinitely when grounded
+                if (_verticalVelocity < 0.0f)
+                {
+                    _verticalVelocity = -2f;
+                }
 
-					// Jump
-					if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-					{
-						// the square root of H * -2 * G = how much velocity needed to reach desired height
-						_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-					}
+                // Jump
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                {
+                    // the square root of H * -2 * G = how much velocity needed to reach desired height
+                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                }
 
-					// jump timeout
-					if (_jumpTimeoutDelta >= 0.0f)
-					{
-						_jumpTimeoutDelta -= Time.deltaTime;
-					}
-				}
-				else
-				{
-					// reset the jump timeout timer
-					_jumpTimeoutDelta = JumpTimeout;
+                // jump timeout
+                if (_jumpTimeoutDelta >= 0.0f)
+                {
+                    _jumpTimeoutDelta -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                // reset the jump timeout timer
+                _jumpTimeoutDelta = JumpTimeout;
 
-					// fall timeout
-					if (_fallTimeoutDelta >= 0.0f)
-					{
-						_fallTimeoutDelta -= Time.deltaTime;
-					}
+                // fall timeout
+                if (_fallTimeoutDelta >= 0.0f)
+                {
+                    _fallTimeoutDelta -= Time.deltaTime;
+                }
 
-					// if we are not grounded, do not jump
-					_input.jump = false;
-				}
-			}
+                // if we are not grounded, do not jump
+                _input.jump = false;
+            }
 
-			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-			if (_verticalVelocity < _terminalVelocity)
+            // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
+            if (_verticalVelocity < _terminalVelocity)
 			{
 				_verticalVelocity += Gravity * Time.deltaTime;
 			}

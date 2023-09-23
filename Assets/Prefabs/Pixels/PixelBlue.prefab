@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4548454859297903938}
   - component: {fileID: 2847646130910277885}
-  - component: {fileID: 7039245754883157284}
+  - component: {fileID: 8936647614988811067}
   m_Layer: 6
-  m_Name: PixelWhite
+  m_Name: PixelBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 110787ecffeb1f844a7785ab6c0ccffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PixelColour: 0
---- !u!65 &7039245754883157284
+  PixelColour: 3
+--- !u!65 &8936647614988811067
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,7 +129,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3289823a5d48dec4bad86cb001998948, type: 2}
+  - {fileID: 2100000, guid: 7e0b10df2060b2a4f9fa3f9ecc54d182, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
