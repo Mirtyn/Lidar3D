@@ -112,7 +112,7 @@ namespace StarterAssets
 
 		bool lastValue = true;
 
-		private void Update()
+		private void FixedUpdate()
 		{
             if (Game.CanUseInput != lastValue)
 			{
@@ -131,14 +131,14 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-		}
+        }
 
-		private void LateUpdate()
+        private void LateUpdate()
 		{
             CameraRotation();
         }
 
-		private void GroundedCheck()
+        private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);

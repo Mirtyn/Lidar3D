@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,15 +32,47 @@ public class Player : ProjectBehaviour
     [SerializeField] private LayerMask grabeableObjectMask;
     [SerializeField] private LayerMask pixelMask;
 
+    [SerializeField] private SpringJoint jointData;
     [SerializeField] private SpringJoint joint;
+    private Transform jointTransform;
+
+    RaycastHit lastHitObject;
+
 
     private void Awake()
     {
         ProjectBehaviour.GameStart();
+        //jointData = jointData.
+        //jointData.autoConfigureConnectedAnchor = true;
+        //jointData.breakForce = 20f;
+        //jointData.enableCollision = false;
+        //jointData.enablePreprocessing = true;
+        //jointData.maxDistance = 0;
+        //jointData.minDistance = 0;
+        jointTransform = joint.gameObject.transform;
     }
 
     private void Update()
     {
+        if (joint == null)
+        {
+            lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
+
+            joint = jointTransform.gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = jointData.autoConfigureConnectedAnchor;
+            joint.breakForce = jointData.breakForce;
+            joint.breakTorque = jointData.breakTorque;
+            joint.damper = jointData.damper;
+            joint.enableCollision = jointData.enableCollision;
+            joint.enablePreprocessing = jointData.enablePreprocessing;
+            joint.massScale = jointData.massScale;
+            joint.maxDistance = jointData.maxDistance;
+            joint.minDistance = jointData.minDistance;
+            joint.connectedMassScale = jointData.connectedMassScale;
+            joint.spring = jointData.spring;
+            joint = jointTransform.gameObject.GetComponent<SpringJoint>();
+        }
+
         CheckForPlayerInput();
         //Debug.Log(Input.mousePosition);
     }
@@ -101,18 +134,26 @@ public class Player : ProjectBehaviour
     }
 
     bool grabbedSomeThing = false;
+
     private void TryGrabObject()
     {
         if (grabbedSomeThing == false)
         {
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 3, grabeableObjectMask))
             {
+                lastHitObject = hit;
+                Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + (mainCamera.transform.forward * 3), Color.magenta, 2f);
+
+                lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectHeld();
+
                 grabbedSomeThing = true;
                 joint.connectedBody = hit.rigidbody;
             }
         }
         else
         {
+            lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
+
             grabbedSomeThing = false;
             joint.connectedBody = null;
         }
