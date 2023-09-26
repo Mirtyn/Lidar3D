@@ -378,6 +378,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 0.9999996, z: 0.9999997}
   m_Center: {x: 0, y: 0.00000047683716, z: -0.00000047683716}
+--- !u!1 &483555338 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1568165024435924340, guid: 9786c29f69b8e5c47affdce521d8fd35,
+    type: 3}
+  m_PrefabInstance: {fileID: 6715396629253521045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &483555339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483555338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21009e692635bc647b938ffc945daf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lights: {fileID: 1460650606}
 --- !u!4 &580115976 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3579a69d001016e439b367e55b88d8c9,
@@ -1692,7 +1711,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017929139}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1720,11 +1739,11 @@ SpringJoint:
   m_GameObject: {fileID: 2017929139}
   m_ConnectedBody: {fileID: 2124243397}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.49999997, z: 0}
+  m_Anchor: {x: 0, y: 0.25, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_Spring: 200
+  m_Spring: 1
   m_Damper: 0.2
   m_MinDistance: 0
   m_MaxDistance: 0
@@ -2139,6 +2158,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 277062079641899450, guid: 9786c29f69b8e5c47affdce521d8fd35,
+        type: 3}
+      propertyPath: strength
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 474285904720379088, guid: 9786c29f69b8e5c47affdce521d8fd35,
+        type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 896
+      objectReference: {fileID: 0}
     - target: {fileID: 1568165024435924340, guid: 9786c29f69b8e5c47affdce521d8fd35,
         type: 3}
       propertyPath: m_Name
@@ -2204,6 +2233,11 @@ PrefabInstance:
       propertyPath: pixelsParent
       value: 
       objectReference: {fileID: 127627898}
+    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
+        type: 3}
+      propertyPath: mapMask.m_Bits
+      value: 896
+      objectReference: {fileID: 0}
     - target: {fileID: 6353104955007189892, guid: 9786c29f69b8e5c47affdce521d8fd35,
         type: 3}
       propertyPath: playerCameraTransform
@@ -2212,7 +2246,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1568165024435924340, guid: 9786c29f69b8e5c47affdce521d8fd35,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 483555339}
   m_SourcePrefab: {fileID: 100100000, guid: 9786c29f69b8e5c47affdce521d8fd35, type: 3}
 --- !u!4 &9005220659495641016 stripped
 Transform:
