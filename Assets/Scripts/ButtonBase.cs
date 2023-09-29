@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Button : MonoBehaviour
+public class ButtonBase : MonoBehaviour
 {
-    [SerializeField] private LayerMask buttonLayer;
+    private LayerMask buttonLayer = 9;
     [SerializeField] private Rigidbody buttonrb;
-    public UnityEvent OnPressed;
-    public UnityEvent OnReleased;
-
+    [SerializeField] private MapButton mapButton;
     public bool AddForceNextFixedUpdate = false;
-    private Vector3 force = new Vector3(0, -70f, 0);
+    private Vector3 force = new Vector3(0, -55f, 0);
 
     private void FixedUpdate()
     {
@@ -27,7 +23,7 @@ public class Button : MonoBehaviour
     {
         if (other.gameObject.layer == buttonLayer)
         {
-            OnPressed?.Invoke();
+            mapButton.OnPressed?.Invoke();
         }
     }
 
@@ -35,7 +31,7 @@ public class Button : MonoBehaviour
     {
         if (other.gameObject.layer == buttonLayer)
         {
-            OnReleased?.Invoke();
+            mapButton.OnReleased?.Invoke();
         }
     }
 }

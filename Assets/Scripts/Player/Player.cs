@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 public class Player : ProjectBehaviour
 {
     private const string PUSHEABLE_OBJECT_TAG = "PusheableObject";
+    private const string BUTTON_TAG = "Button";
+    private const string DOOR_TAG = "Door";
     private const string ENEMY_TAG = "Enemy";
 
     [SerializeField] private Camera mainCamera;
@@ -20,6 +22,8 @@ public class Player : ProjectBehaviour
     [SerializeField] GameObject pixelWhite;
     [SerializeField] GameObject pixelBlue;
     [SerializeField] GameObject pixelRed;
+    [SerializeField] GameObject pixelMagenta;
+    [SerializeField] GameObject pixelGray;
 
     private List<GameObject> pixels = new List<GameObject>();
 
@@ -268,12 +272,30 @@ public class Player : ProjectBehaviour
                         raycastHitTrigger = hit[i];
                         break;
                     }
+                    else if (hit[i].transform.CompareTag(BUTTON_TAG))
+                    {
+                        if (pixelColour == Pixel._PixelColour.White)
+                        {
+                            pixelColour = Pixel._PixelColour.Magenta;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
                     else if (hit[i].transform.CompareTag(ENEMY_TAG))
                     {
                         if (pixelColour == Pixel._PixelColour.White)
                         {
                             pixelColour = Pixel._PixelColour.Red;
                         }
+                    }
+                    else if (hit[i].transform.CompareTag(DOOR_TAG))
+                    {
+                        if (pixelColour == Pixel._PixelColour.White)
+                        {
+                            pixelColour = Pixel._PixelColour.Gray;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
                     }
                     else
                     {
@@ -297,6 +319,8 @@ public class Player : ProjectBehaviour
         {
             Pixel._PixelColour.Red => pixelRed,
             Pixel._PixelColour.Blue => pixelBlue,
+            Pixel._PixelColour.Magenta => pixelMagenta,
+            Pixel._PixelColour.Gray => pixelGray,
             _ => pixelWhite,
         };
 

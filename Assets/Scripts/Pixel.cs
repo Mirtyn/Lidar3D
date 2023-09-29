@@ -5,7 +5,9 @@ public class Pixel : ProjectBehaviour
         White,
         Red,
         Green,
-        Blue
+        Blue,
+        Magenta,
+        Gray
     }
 
     public _PixelColour PixelColour;
