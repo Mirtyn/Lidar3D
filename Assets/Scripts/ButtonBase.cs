@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonBase : MonoBehaviour
+public class ButtonBase : ProjectBehaviour
 {
     private LayerMask buttonLayer = 9;
     [SerializeField] private Rigidbody buttonrb;
@@ -12,26 +12,38 @@ public class ButtonBase : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (AddForceNextFixedUpdate)
+        if (!Game.GamePaused)
         {
-            AddForceNextFixedUpdate = false;
-            buttonrb.AddForce(force * Time.deltaTime, ForceMode.Force);
+            if (AddForceNextFixedUpdate)
+            {
+                AddForceNextFixedUpdate = false;
+                buttonrb.AddForce(force * Time.deltaTime, ForceMode.Force);
+            }
         }
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == buttonLayer)
+        if (!Game.GamePaused)
         {
-            mapButton.OnPressed?.Invoke();
+            if (other.gameObject.layer == buttonLayer)
+            {
+                mapButton.OnPressed?.Invoke();
+            }
         }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == buttonLayer)
+        if (!Game.GamePaused)
         {
-            mapButton.OnReleased?.Invoke();
+            if (other.gameObject.layer == buttonLayer)
+            {
+                mapButton.OnReleased?.Invoke();
+            }
         }
+        
     }
 }

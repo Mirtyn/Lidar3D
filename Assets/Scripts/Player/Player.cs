@@ -77,38 +77,49 @@ public class Player : ProjectBehaviour
             joint = jointTransform.gameObject.GetComponent<SpringJoint>();
         }
 
-        CheckForPlayerInput();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Game.GamePaused = !Game.GamePaused;
+        }
+
+        if (!Game.GamePaused)
+        {
+            CheckForPlayerInput();
+        }
         //Debug.Log(Input.mousePosition);
     }
 
     private void FixedUpdate()
     {
-        if (drawPictureNextFixedUpdate)
+        if (!Game.GamePaused)
         {
-            drawPictureNextFixedUpdate = false;
+            if (drawPictureNextFixedUpdate)
+            {
+                drawPictureNextFixedUpdate = false;
 
-            DrawPicture();
-        }
+                DrawPicture();
+            }
 
-        if (draw1RandomDirLineFixedUpdate)
-        {
-            draw1RandomDirLineFixedUpdate = false;
+            if (draw1RandomDirLineFixedUpdate)
+            {
+                draw1RandomDirLineFixedUpdate = false;
 
-            Draw1RandomDirLine();
-        }
+                Draw1RandomDirLine();
+            }
 
-        if (drawDirLineForPixelRemovalFixedUpdate)
-        {
-            drawDirLineForPixelRemovalFixedUpdate = false;
+            if (drawDirLineForPixelRemovalFixedUpdate)
+            {
+                drawDirLineForPixelRemovalFixedUpdate = false;
 
-            DrawRaysForPixelRemoval();
-        }
+                DrawRaysForPixelRemoval();
+            }
 
-        if (tryGrabObjectNextFixedUpdate)
-        {
-            tryGrabObjectNextFixedUpdate = false;
+            if (tryGrabObjectNextFixedUpdate)
+            {
+                tryGrabObjectNextFixedUpdate = false;
 
-            TryGrabObject();
+                TryGrabObject();
+            }
         }
     }
 

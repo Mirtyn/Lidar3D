@@ -114,28 +114,34 @@ namespace StarterAssets
 
 		private void FixedUpdate()
 		{
-            if (Game.CanUseInput != lastValue)
+			if (!Game.GamePaused)
 			{
-				lastValue = Game.CanUseInput;
+                if (Game.CanUseInput != lastValue)
+                {
+                    lastValue = Game.CanUseInput;
 
-                if (!Game.CanUseInput)
-                {
-                    _playerInput.DeactivateInput();
+                    if (!Game.CanUseInput)
+                    {
+                        _playerInput.DeactivateInput();
+                    }
+                    else
+                    {
+                        _playerInput.ActivateInput();
+                    }
                 }
-                else
-                {
-                    _playerInput.ActivateInput();
-                }
+
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
             }
-
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
         }
 
         private void LateUpdate()
 		{
-            CameraRotation();
+            if (!Game.GamePaused)
+            {
+                CameraRotation();
+            }
         }
 
         private void GroundedCheck()

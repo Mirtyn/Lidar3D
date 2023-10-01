@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : ProjectBehaviour
 {
     [SerializeField] private GameObject door;
     [SerializeField] private GameObject openDoor;
@@ -24,18 +24,27 @@ public class Door : MonoBehaviour
 
     void Update()
     {
-        var target = isOpened ? openDoor : closedDoor;
+        if (!Game.GamePaused)
+        {
+            var target = isOpened ? openDoor : closedDoor;
 
-        door.transform.position = Vector3.MoveTowards(door.transform.position, target.transform.position, moveSpeed * Time.deltaTime);
+            door.transform.position = Vector3.MoveTowards(door.transform.position, target.transform.position, moveSpeed * Time.deltaTime);
+        }
     }
 
     public void OpenDoor()
     {
-        isOpened = true;
+        if (!Game.GamePaused)
+        {
+            isOpened = true;
+        }
     }
 
     public void CloseDoor()
     {
-        isOpened = false;
+        if (!Game.GamePaused)
+        {
+            isOpened = false;
+        }
     }
 }
