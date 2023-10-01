@@ -9,5 +9,5 @@ public class PlayerFirstPersonMovement : ProjectBehaviour
     [SerializeField] private float playerRunSpeed = 8f;
     [SerializeField] private float accelerationAndDeaccelerationSpeed = 8f;
 
-    [SerializeField] private float jumpTimeOut
+    [SerializeField] private float jumpTimeOut;
 }
