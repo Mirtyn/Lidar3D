@@ -60,6 +60,7 @@ public class Player : ProjectBehaviour
     {
         if (joint == null)
         {
+            grabbedSomeThing = false;
             lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
 
             joint = jointTransform.gameObject.AddComponent<SpringJoint>();
