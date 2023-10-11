@@ -28,9 +28,12 @@ public class JointHolder : ProjectBehaviour
 
             if (hit.transform != null)
             {
-                if (hit.collider.attachedRigidbody == this.GetComponent<SpringJoint>().connectedBody)
+                if (TryGetComponent<SpringJoint>(out SpringJoint sJ))
                 {
-                    Destroy(this.GetComponent<SpringJoint>());
+                    if (hit.collider.attachedRigidbody == sJ.connectedBody)
+                    {
+                        Destroy(sJ);
+                    }
                 }
             }
         }

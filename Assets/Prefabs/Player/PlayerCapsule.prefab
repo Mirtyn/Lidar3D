@@ -15,7 +15,9 @@ GameObject:
   - component: {fileID: 8932584914622380725}
   - component: {fileID: 7754800723912904291}
   - component: {fileID: 4047084109743400428}
-  m_Layer: 0
+  - component: {fileID: 7815555284221919013}
+  - component: {fileID: 1708567330001603902}
+  m_Layer: 10
   m_Name: PlayerCapsule
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -53,7 +55,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -91,7 +93,7 @@ MonoBehaviour:
   GroundedRadius: 0.5
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 896
   CinemachineCameraTarget: {fileID: 3337943742034880474}
   TopClamp: 89
   BottomClamp: -89
@@ -111,7 +113,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 768
   canPush: 1
-  strength: 1.1
+  strength: 1.05
 --- !u!114 &8932584914622380725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,9 +252,13 @@ MonoBehaviour:
     type: 3}
   pixelRed: {fileID: 3399251440707562350, guid: 96e753519561a7044b28917df3b0eedd,
     type: 3}
+  pixelMagenta: {fileID: 3399251440707562350, guid: 38c9bc440ededd046a5d2d809d84f9c4,
+    type: 3}
+  pixelGray: {fileID: 3399251440707562350, guid: e13263bd672258e49a23fcd343f14cb3,
+    type: 3}
   mapMask:
     serializedVersion: 2
-    m_Bits: 896
+    m_Bits: 2944
   grabeableObjectMask:
     serializedVersion: 2
     m_Bits: 256
@@ -262,6 +268,34 @@ MonoBehaviour:
   jointData: {fileID: 2185958148735870905, guid: cfaefc909225ee24db69b57d0ab32173,
     type: 3}
   joint: {fileID: 4878974418679596186}
+--- !u!114 &7815555284221919013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568165024435924340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21009e692635bc647b938ffc945daf26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lights: {fileID: 0}
+--- !u!114 &1708567330001603902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568165024435924340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79e7d2582fe7a74584f115989288230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonLayer:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1001 &2133335765188438757
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -325,6 +359,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCameraRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 3731764139870866751, guid: e497344b6808655449ea3e97f1e22b53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -354,6 +393,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Capsule
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455430877959334236, guid: ec4c10b9df2f39643bb6108c9152df5f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6460054331068464414, guid: ec4c10b9df2f39643bb6108c9152df5f,
         type: 3}
@@ -424,6 +468,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3233329291926839940}
     m_Modifications:
+    - target: {fileID: 416951797444403367, guid: cfaefc909225ee24db69b57d0ab32173,
+        type: 3}
+      propertyPath: playerCapsuleTransform
+      value: 
+      objectReference: {fileID: 3233329291926839940}
+    - target: {fileID: 416951797444403367, guid: cfaefc909225ee24db69b57d0ab32173,
+        type: 3}
+      propertyPath: pusheableObjectLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 5762799960763096997, guid: cfaefc909225ee24db69b57d0ab32173,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -483,6 +537,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: JointHolder
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229523187018800808, guid: cfaefc909225ee24db69b57d0ab32173,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
