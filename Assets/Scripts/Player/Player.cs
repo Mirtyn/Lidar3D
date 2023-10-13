@@ -96,8 +96,6 @@ public class Player : ProjectBehaviour
         {
             if (drawPictureNextFixedUpdate)
             {
-                drawPictureNextFixedUpdate = false;
-
                 DrawPicture();
             }
 
@@ -207,53 +205,94 @@ public class Player : ProjectBehaviour
 
     Vector3 screenPos = Vector3.zero;
 
-
-    int i = 0;
-    int j = 0;
-
     float timeInBetweenPicturePixelDrawn = 0.015f;
+    int currentXLine = 0;
+    int currentYLine = 0;
 
     private void DrawPicture()
     {
         distanceBetweenPixelsX = pictureSizeX / pixelsInPictureOn1Line;
         distanceBetweenPixelsY = pictureSizeY / pixelsInPictureOn1Line;
 
-
-        i = 0;
-        j = 0;
-
-        StartCoroutine(OnDrawPicture());
-    }
-
-    IEnumerator OnDrawPicture()
-    {
         Game.CanUseInput = false;
 
-        for (j = 0; j <= pixelsInPictureOn1Line; j++)
+        if (currentXLine < pixelsInPictureOn1Line)
         {
-            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (j * distanceBetweenPixelsY);
+            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenPixelsY);
 
-            for (i = 0; i <= pixelsInPictureOn1Line; i++)
-            {
-                screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (i * distanceBetweenPixelsX);
+            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenPixelsX);
 
-                Ray ray = mainCamera.ScreenPointToRay(screenPos);
+            Ray ray = mainCamera.ScreenPointToRay(screenPos);
 
-                List<RaycastHit> hit = new List<RaycastHit>();
-                hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
+            List<RaycastHit> hit = new List<RaycastHit>();
+            hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
 
-                Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
 
-                CheckPixelColour(hit);
+            CheckPixelColour(hit);
 
-                yield return new WaitForSecondsRealtime(timeInBetweenPicturePixelDrawn);
-            }
+            currentXLine++;
+        }
+        else if (currentYLine < pixelsInPictureOn1Line - 1)
+        {
+            currentXLine = 0;
+            currentYLine++;
+
+            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenPixelsY);
+
+            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenPixelsX);
+
+            Ray ray = mainCamera.ScreenPointToRay(screenPos);
+
+            List<RaycastHit> hit = new List<RaycastHit>();
+            hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
+
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
+
+            CheckPixelColour(hit);
+
+            currentXLine++;
+        }
+        else
+        {
+            Game.CanUseInput = true;
+            drawPictureNextFixedUpdate = false;
+            currentXLine = 0;
+            currentYLine = 0;
         }
 
-        Game.CanUseInput = true;
-
-        yield break;
+        //StartCoroutine(OnDrawPicture());
     }
+
+    //IEnumerator OnDrawPicture()
+    //{
+    //    Game.CanUseInput = false;
+
+    //    for (j = 0; j < pixelsInPictureOn1Line; j++)
+    //    {
+    //        screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (j * distanceBetweenPixelsY);
+
+    //        for (i = 0; i < pixelsInPictureOn1Line; i++)
+    //        {
+    //            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (i * distanceBetweenPixelsX);
+
+    //            Ray ray = mainCamera.ScreenPointToRay(screenPos);
+
+    //            List<RaycastHit> hit = new List<RaycastHit>();
+    //            hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
+
+    //            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
+
+    //            CheckPixelColour(hit);
+
+    //            yield return new WaitForSecondsRealtime(timeInBetweenPicturePixelDrawn);
+    //        }
+    //    }
+
+    //    Game.CanUseInput = true;
+
+    //    yield break;
+    //}
 
     private void CheckPixelColour(List<RaycastHit> hit)
     {
