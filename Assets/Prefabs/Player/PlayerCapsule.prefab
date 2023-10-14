@@ -268,6 +268,10 @@ MonoBehaviour:
   jointData: {fileID: 2185958148735870905, guid: cfaefc909225ee24db69b57d0ab32173,
     type: 3}
   joint: {fileID: 4878974418679596186}
+  volumeProfile: {fileID: 11400000, guid: 56a0eb7ca0c1d8143bd6eba71feaf381, type: 2}
+  MaxHealth: 100
+  Health: 0
+  DamageASec: 20
 --- !u!114 &7815555284221919013
 MonoBehaviour:
   m_ObjectHideFlags: 0

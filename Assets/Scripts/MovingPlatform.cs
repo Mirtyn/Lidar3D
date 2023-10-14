@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovingPlatform : ProjectBehaviour
 {
     private GameObject player;
+    private CharacterController playerCharacterController;
     [SerializeField] private GameObject endPoint;
     [SerializeField] private GameObject startPoint;
     [SerializeField] private bool dir = false;
@@ -16,6 +17,7 @@ public class MovingPlatform : ProjectBehaviour
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerCharacterController = player.GetComponent<CharacterController>();
 
         startPoint.SetActive(false);
         endPoint.SetActive(false);
@@ -41,7 +43,7 @@ public class MovingPlatform : ProjectBehaviour
 
             if (playerInside)
             {
-                player.transform.position += diffrence;
+                playerCharacterController.Move(diffrence);
             }
         }
     }

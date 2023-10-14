@@ -1,33 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8828940804281687218
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
-  m_Name: Vignette
-  m_EditorClassIdentifier: 
-  active: 0
-  color:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 0, b: 0, a: 1}
-  center:
-    m_OverrideState: 1
-    m_Value: {x: 0.5, y: 0.5}
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0
-  smoothness:
-    m_OverrideState: 1
-    m_Value: 0.01
-  rounded:
-    m_OverrideState: 1
-    m_Value: 1
 --- !u!114 &-8117322444877523699
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -59,16 +31,16 @@ MonoBehaviour:
   active: 1
   scanLineJitter:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.6
   verticalJump:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.2
   horizontalShake:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.2
   colorDrift:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.88
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +57,6 @@ MonoBehaviour:
   - {fileID: -7857355361299317437}
   - {fileID: 4907755782978038919}
   - {fileID: 801179775630414777}
-  - {fileID: -8828940804281687218}
 --- !u!114 &801179775630414777
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -148,7 +119,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.16
 --- !u!114 &5932969237171010068
 MonoBehaviour:
   m_ObjectHideFlags: 3

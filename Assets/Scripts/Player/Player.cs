@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using URPGlitch.Runtime.AnalogGlitch;
+using URPGlitch.Runtime.DigitalGlitch;
 using Random = UnityEngine.Random;
 
 public class Player : ProjectBehaviour
@@ -42,10 +46,65 @@ public class Player : ProjectBehaviour
 
     RaycastHit lastHitObject;
 
+    [SerializeField] private VolumeProfile volumeProfile;
+    private URPGlitch.Runtime.AnalogGlitch.AnalogGlitchVolume analogGlitchVolume;
+    private URPGlitch.Runtime.DigitalGlitch.DigitalGlitchVolume digitalGlitchVolume;
+
+    float maxDigitalGlitchValue = 0.1f;
+
+    float maxScanLineJitterValue = 0.4f;
+    float maxVerticalJumpValue = 0.09f;
+    float maxHorizontalShakeValue = 0.035f;
+    float maxColorDriftValue = 0.28f;
+
+    public float MaxHealth = 100f;
+    public float Health;
+    public float DamageASec = 30f;
+    public float HealthRagenASec = 14f;
+
+    [SerializeField] private GameObject redScreenOverlay;
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.CompareTag("Enemy"))
+        {
+            Health -= DamageASec * Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.transform.CompareTag("Enemy"))
+        {
+            Health -= DamageASec * Time.deltaTime;
+        }
+    }
 
     private void Awake()
     {
         ProjectBehaviour.GameStart();
+
+        Health = MaxHealth;
+
+        if (!volumeProfile.TryGet(out analogGlitchVolume))
+        {
+            Debug.Log("None found");
+        }
+
+        if (!volumeProfile.TryGet(out digitalGlitchVolume))
+        {
+            Debug.Log("None found");
+        }
+
+        digitalGlitchVolume.intensity.Override(0);
+        analogGlitchVolume.colorDrift.Override(0);
+        analogGlitchVolume.horizontalShake.Override(0);
+        analogGlitchVolume.scanLineJitter.Override(0);
+        analogGlitchVolume.verticalJump.Override(0);
+
+        //analogGlitchVolume = volumeProfile.components[0];
+        //digitalGlitchVolume = volumeProfile.components[1];
+
         //jointData = jointData.
         //jointData.autoConfigureConnectedAnchor = true;
         //jointData.breakForce = 20f;
@@ -58,6 +117,19 @@ public class Player : ProjectBehaviour
 
     private void Update()
     {
+        if (Health != MaxHealth)
+        {
+            Health += HealthRagenASec * Time.deltaTime;
+
+            if (Health > MaxHealth) Health = MaxHealth;
+
+            if (Health < -180f) Health = -180;
+
+            if (Health <= 0f) PlayerDeath();
+        }
+
+        SetPlayerHealthVisual();
+
         if (joint == null)
         {
             grabbedSomeThing = false;
@@ -88,6 +160,45 @@ public class Player : ProjectBehaviour
             CheckForPlayerInput();
         }
         //Debug.Log(Input.mousePosition);
+    }
+
+    private void SetPlayerHealthVisual()
+    {
+        float h = MathF.Abs(Health - MaxHealth);
+
+        digitalGlitchVolume.intensity.Override((maxDigitalGlitchValue / MaxHealth) * h);
+
+        analogGlitchVolume.colorDrift.Override((maxColorDriftValue / MaxHealth) * h);
+
+        if (Health > -50)
+        {
+            analogGlitchVolume.scanLineJitter.Override((maxScanLineJitterValue / MaxHealth) * h);
+        }
+
+        if (h >= 50f)
+        {
+            analogGlitchVolume.verticalJump.Override((maxVerticalJumpValue / MaxHealth) * h);
+        }
+        else
+        {
+            analogGlitchVolume.verticalJump.Override(0);
+        }
+
+        if (h >= 80f)
+        {
+            analogGlitchVolume.horizontalShake.Override((maxHorizontalShakeValue / MaxHealth) * h);
+        }
+        else
+        {
+            analogGlitchVolume.horizontalShake.Override(0);
+        }
+    }
+
+    private void PlayerDeath()
+    {
+        Game.CanUseInput = false;
+        redScreenOverlay.SetActive(true);
+        DamageASec = 40f;
     }
 
     private void FixedUpdate()
