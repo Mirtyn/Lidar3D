@@ -2,12 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using URPGlitch.Runtime.AnalogGlitch;
-using URPGlitch.Runtime.DigitalGlitch;
 using Random = UnityEngine.Random;
 
 public class Player : ProjectBehaviour
@@ -54,7 +50,7 @@ public class Player : ProjectBehaviour
 
     float maxScanLineJitterValue = 0.4f;
     float maxVerticalJumpValue = 0.09f;
-    float maxHorizontalShakeValue = 0.035f;
+    float maxHorizontalShakeValue = 0.1f;
     float maxColorDriftValue = 0.28f;
 
     public float MaxHealth = 100f;
@@ -125,7 +121,7 @@ public class Player : ProjectBehaviour
 
             if (Health < -180f) Health = -180;
 
-            if (Health <= 0f) PlayerDeath();
+            if (Health <= 0f && !Game.PlayerDied) PlayerDeath();
         }
 
         SetPlayerHealthVisual();
@@ -164,7 +160,51 @@ public class Player : ProjectBehaviour
 
     private void SetPlayerHealthVisual()
     {
-        float h = MathF.Abs(Health - MaxHealth);
+        float b = 1f;
+
+        if (Health < 25)
+        {
+            b = 1.45f;
+        }
+        else if (Health < 30)
+        {
+            b = 1.35f;
+        }
+        else if (Health < 35)
+        {
+            b = 1.3f;
+        }
+        else if (Health < 40)
+        {
+            b = 1.25f;
+        }
+        else if (Health < 45)
+        {
+            b = 1.2f;
+        }
+        else if (Health < 50)
+        {
+            b = 1.15f;
+        }
+        else if (Health < 55)
+        {
+            b = 1.12f;
+        }
+        else if (Health < 60)
+        {
+            b = 1.09f;
+        }
+        else if (Health < 65)
+        {
+            b = 1.06f;
+        }
+        else if (Health < 70)
+        {
+            b = 1.03f;
+        }
+        
+
+        float h = MathF.Abs((Health - MaxHealth) * b);
 
         digitalGlitchVolume.intensity.Override((maxDigitalGlitchValue / MaxHealth) * h);
 
@@ -175,7 +215,7 @@ public class Player : ProjectBehaviour
             analogGlitchVolume.scanLineJitter.Override((maxScanLineJitterValue / MaxHealth) * h);
         }
 
-        if (h >= 50f)
+        if (h >= 65f)
         {
             analogGlitchVolume.verticalJump.Override((maxVerticalJumpValue / MaxHealth) * h);
         }
@@ -196,6 +236,7 @@ public class Player : ProjectBehaviour
 
     private void PlayerDeath()
     {
+        Game.PlayerDied = true;
         Game.CanUseInput = false;
         redScreenOverlay.SetActive(true);
         DamageASec = 40f;

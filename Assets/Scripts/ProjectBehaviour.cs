@@ -10,5 +10,6 @@ public class ProjectBehaviour : MonoBehaviour
     public static void GameStart()
     {
         Game = new GameManager();
+        Game.PlayerDied = false;
     }
 }
