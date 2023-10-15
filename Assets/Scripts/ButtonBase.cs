@@ -26,7 +26,7 @@ public class ButtonBase : ProjectBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!Game.GamePaused)
-        {
+          {
             if (other.gameObject.layer == buttonLayer)
             {
                 mapButton.OnPressed?.Invoke();

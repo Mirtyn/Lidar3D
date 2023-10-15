@@ -66,6 +66,11 @@ public class Player : ProjectBehaviour
         {
             Health -= DamageASec * Time.deltaTime;
         }
+
+        if (collision.transform.CompareTag("DeathZone"))
+        {
+            Health -= DamageASec * 2.5f * Time.deltaTime;
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -73,6 +78,11 @@ public class Player : ProjectBehaviour
         if (other.transform.CompareTag("Enemy"))
         {
             Health -= DamageASec * Time.deltaTime;
+        }
+
+        if (other.transform.CompareTag("DeathZone"))
+        {
+            Health -= DamageASec * 2.5f * Time.deltaTime;
         }
     }
 
@@ -506,9 +516,9 @@ public class Player : ProjectBehaviour
                         break;
                     }
                 }
-            }
 
-            DrawPixel(raycastHitTrigger, pixelColour);
+                DrawPixel(raycastHitTrigger, pixelColour);
+            }
         }
     }
 
