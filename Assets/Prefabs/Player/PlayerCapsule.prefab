@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 8932584914622380725}
   - component: {fileID: 7754800723912904291}
   - component: {fileID: 4047084109743400428}
-  - component: {fileID: 7815555284221919013}
   - component: {fileID: 1708567330001603902}
+  - component: {fileID: 6196143279358510955}
   m_Layer: 10
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -272,19 +272,8 @@ MonoBehaviour:
   MaxHealth: 100
   Health: 0
   DamageASec: 20
---- !u!114 &7815555284221919013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1568165024435924340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21009e692635bc647b938ffc945daf26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lights: {fileID: 0}
+  HealthRagenASec: 14
+  redScreenOverlay: {fileID: 0}
 --- !u!114 &1708567330001603902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,6 +289,18 @@ MonoBehaviour:
   buttonLayer:
     serializedVersion: 2
     m_Bits: 2048
+--- !u!114 &6196143279358510955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568165024435924340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d6bf17447a8ffa4e86705f41a9cd55d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2133335765188438757
 PrefabInstance:
   m_ObjectHideFlags: 0
