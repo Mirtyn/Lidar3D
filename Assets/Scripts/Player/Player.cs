@@ -12,6 +12,7 @@ public class Player : ProjectBehaviour
     private const string BUTTON_TAG = "Button";
     private const string DOOR_TAG = "Door";
     private const string ENEMY_TAG = "Enemy";
+    private const string MOVING_PLATFORM_TAG = "MovingPlatform";
 
     [SerializeField] private Camera mainCamera;
 
@@ -24,6 +25,7 @@ public class Player : ProjectBehaviour
     [SerializeField] GameObject pixelRed;
     [SerializeField] GameObject pixelMagenta;
     [SerializeField] GameObject pixelGray;
+    [SerializeField] GameObject pixelGreen;
 
     private List<GameObject> pixels = new List<GameObject>();
 
@@ -510,6 +512,15 @@ public class Player : ProjectBehaviour
                         raycastHitTrigger = hit[i];
                         break;
                     }
+                    else if (hit[i].transform.CompareTag(MOVING_PLATFORM_TAG))
+                    {
+                        if (pixelColour == Pixel._PixelColour.White)
+                        {
+                            pixelColour = Pixel._PixelColour.Green;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
                     else
                     {
                         raycastHitTrigger = hit[i];
@@ -534,6 +545,7 @@ public class Player : ProjectBehaviour
             Pixel._PixelColour.Blue => pixelBlue,
             Pixel._PixelColour.Magenta => pixelMagenta,
             Pixel._PixelColour.Gray => pixelGray,
+            Pixel._PixelColour.Green => pixelGreen,
             _ => pixelWhite,
         };
 
