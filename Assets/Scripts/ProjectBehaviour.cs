@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,16 +19,35 @@ public class ProjectBehaviour : MonoBehaviour
         Game.PlayerDied = false;
     }
 
+    public static void ReLoadCurrentLevel()
+    {
+        Scene s = SceneManager.GetActiveScene();
+
+        SceneManager.LoadScene(s.buildIndex);
+    }
+
     public static void LevelCompleted(int lvl)
     {
         currentSaveGameData.LvlsWon[lvl] = true;
+    }
+
+    public static void LoadLevelByIndex(int lvlIndex)
+    {
+        SceneManager.LoadScene(lvlIndex);
     }
 
     public static void LoadNextSceneInBuildIndex()
     {
         Scene s = SceneManager.GetActiveScene();
 
-        SceneManager.LoadScene(s.buildIndex + 1);
+        if (s.buildIndex + 1 < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(s.buildIndex + 1);
+        }
+        else
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public static void Save()
@@ -54,14 +71,18 @@ public class ProjectBehaviour : MonoBehaviour
         Application.Quit();
     }
 
-    public class SaveGame
+    public static void SetGameSpeed(float value)
     {
-        public bool[] LvlsWon = new bool[]
-        {
-            false,
-            false,
-            false
-        };
+        Time.timeScale = value;
     }
 }
 
+public class SaveGame
+{
+    public bool[] LvlsWon = new bool[]
+    {
+        false,
+        false,
+        false
+    };
+}

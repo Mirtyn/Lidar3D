@@ -1,13 +1,16 @@
+using StarterAssets;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
+using Input = UnityEngine.Input;
 
 public class Player : ProjectBehaviour
 {
+    public static Player Instance;
+
     private const string PUSHEABLE_OBJECT_TAG = "PusheableObject";
     private const string BUTTON_TAG = "Button";
     private const string DOOR_TAG = "Door";
@@ -60,37 +63,52 @@ public class Player : ProjectBehaviour
     public float DamageASec = 30f;
     public float HealthRagenASec = 14f;
 
+    public StarterAssetsInputs _input;
+
     [SerializeField] private GameObject redScreenOverlay;
+    [SerializeField] private GameObject console;
+    [SerializeField] private GameObject pausedMenu;
+    public GameObject Lights;
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.transform.CompareTag("Enemy"))
+        if (!Game.GamePaused)
         {
-            Health -= DamageASec * Time.deltaTime;
-        }
+            if (collision.transform.CompareTag("Enemy"))
+            {
+                Health -= DamageASec * Time.deltaTime;
+            }
 
-        if (collision.transform.CompareTag("DeathZone"))
-        {
-            Health -= DamageASec * 2.5f * Time.deltaTime;
+            if (collision.transform.CompareTag("DeathZone"))
+            {
+                Health -= DamageASec * 2.5f * Time.deltaTime;
+            }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.transform.CompareTag("Enemy"))
+        if (!Game.GamePaused)
         {
-            Health -= DamageASec * Time.deltaTime;
-        }
+            if (other.transform.CompareTag("Enemy"))
+            {
+                Health -= DamageASec * Time.deltaTime;
+            }
 
-        if (other.transform.CompareTag("DeathZone"))
-        {
-            Health -= DamageASec * 2.5f * Time.deltaTime;
+            if (other.transform.CompareTag("DeathZone"))
+            {
+                Health -= DamageASec * 2.5f * Time.deltaTime;
+            }
         }
     }
 
     private void Awake()
     {
+        Instance = this;
+
         ProjectBehaviour.GameStart();
+
+        _input = GetComponent<StarterAssetsInputs>();
 
         Health = MaxHealth;
 
@@ -127,7 +145,14 @@ public class Player : ProjectBehaviour
     {
         if (Health != MaxHealth)
         {
-            Health += HealthRagenASec * Time.deltaTime;
+            if (!Game.PlayerDied)
+            {
+                Health += HealthRagenASec * Time.deltaTime;
+            }
+            else
+            {
+                Health -= DamageASec * 0.85f * Time.deltaTime;
+            }
 
             if (Health > MaxHealth) Health = MaxHealth;
 
@@ -160,7 +185,46 @@ public class Player : ProjectBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Game.GamePaused = !Game.GamePaused;
+            console.SetActive(false);
+
+            pausedMenu.SetActive(!pausedMenu.activeSelf);
+            if (pausedMenu.activeSelf)
+            {
+                _input.cursorInputForLook = false;
+                _input.cursorLocked = false;
+                Game.GamePaused = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                _input.cursorInputForLook = true;
+                _input.cursorLocked = true;
+                Game.GamePaused = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Slash))
+        {
+            console.SetActive(!console.activeSelf);
+            if (console.activeSelf)
+            {
+                _input.cursorInputForLook = false;
+                _input.cursorLocked = false;
+                Game.GamePaused = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                _input.cursorInputForLook = true;
+                _input.cursorLocked = true;
+                Game.GamePaused = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         if (!Game.GamePaused)
@@ -369,7 +433,6 @@ public class Player : ProjectBehaviour
 
     Vector3 screenPos = Vector3.zero;
 
-    float timeInBetweenPicturePixelDrawn = 0.015f;
     int currentXLine = 0;
     int currentYLine = 0;
 
@@ -567,5 +630,15 @@ public class Player : ProjectBehaviour
     {
         Destroy(pixel);
         pixels.Remove(pixel);
+    }
+
+    public void SetPlayerHealthToMax()
+    {
+        Health = MaxHealth;
+    }
+
+    public void KillPlayer()
+    {
+        Health = -1f;
     }
 }
