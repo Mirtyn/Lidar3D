@@ -1,17 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class JointHolder : ProjectBehaviour
+public class ObjectHolder : ProjectBehaviour
 {
+    public Rigidbody AttachedRigidbody;
+
     [SerializeField] private Transform playerCameraTransform;
     [SerializeField] private Transform playerCapsuleTransform;
 
     [SerializeField] private LayerMask pusheableObjectLayer;
 
-    private float distanceOfCamera = 1.5f;
-    private float distanceOfRay = 0.6f;
+    [SerializeField] private ForceMode forceMode;
+    [SerializeField] private float multiplier = 0.25f;
 
+    private float distanceOfCamera = 2f;
+    private float distanceOfRay = 0.6f;
 
     private void Update()
     {
@@ -24,6 +26,10 @@ public class JointHolder : ProjectBehaviour
     {
         if (!Game.GamePaused)
         {
+            Vector3 dir = this.transform.position - AttachedRigidbody.transform.position;
+
+            AttachedRigidbody.AddForce(dir * multiplier, forceMode);
+
             Physics.Raycast(playerCapsuleTransform.position, Vector3.down, out RaycastHit hit, distanceOfRay, pusheableObjectLayer);
 
             if (hit.transform != null)

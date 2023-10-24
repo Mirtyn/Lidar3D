@@ -163,26 +163,6 @@ public class Player : ProjectBehaviour
 
         SetPlayerHealthVisual();
 
-        if (joint == null)
-        {
-            grabbedSomeThing = false;
-            lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
-
-            joint = jointTransform.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = jointData.autoConfigureConnectedAnchor;
-            joint.breakForce = jointData.breakForce;
-            joint.breakTorque = jointData.breakTorque;
-            joint.damper = jointData.damper;
-            joint.enableCollision = jointData.enableCollision;
-            joint.enablePreprocessing = jointData.enablePreprocessing;
-            joint.massScale = jointData.massScale;
-            joint.maxDistance = jointData.maxDistance;
-            joint.minDistance = jointData.minDistance;
-            joint.connectedMassScale = jointData.connectedMassScale;
-            joint.spring = jointData.spring;
-            joint = jointTransform.gameObject.GetComponent<SpringJoint>();
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             console.SetActive(false);
@@ -384,7 +364,7 @@ public class Player : ProjectBehaviour
             if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 3, grabeableObjectMask))
             {
                 lastHitObject = hit;
-                Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + (mainCamera.transform.forward * 3), Color.magenta, 2f);
+                Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + (mainCamera.transform.forward * 3), Color.magenta, 5f);
 
                 lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectHeld();
 

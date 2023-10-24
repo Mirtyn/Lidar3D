@@ -16,6 +16,8 @@ public class ProjectBehaviour : MonoBehaviour
     public static void GameStart()
     {
         Game = new GameManager();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Game.PlayerDied = false;
     }
 
