@@ -17,7 +17,7 @@ public class PausedMenu : ProjectBehaviour
      
         player._input.cursorInputForLook = true;
         player._input.cursorLocked = true;
-        Game.GamePaused = false;
+        ResumeGame();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

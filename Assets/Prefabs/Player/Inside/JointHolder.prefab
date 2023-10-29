@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5762799960763096997}
   - component: {fileID: 6584480578004562070}
   - component: {fileID: 416951797444403367}
-  - component: {fileID: 2185958148735870905}
   m_Layer: 0
   m_Name: JointHolder
   m_TagString: Untagged
@@ -73,28 +72,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90396077cf6dd2243a2864af12860233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttachedRigidbody: {fileID: 0}
   playerCameraTransform: {fileID: 0}
---- !u!145 &2185958148735870905
-SpringJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229523187018800808}
-  m_ConnectedBody: {fileID: 0}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  serializedVersion: 2
-  m_Spring: 150
-  m_Damper: 0.01
-  m_MinDistance: 0
-  m_MaxDistance: 0.7
-  m_Tolerance: 0.025
-  m_BreakForce: 50
-  m_BreakTorque: 165
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
+  playerCapsuleTransform: {fileID: 0}
+  pusheableObjectLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  mapLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  forceMode: 0
+  multiplier: 0.25
+  speed: 1

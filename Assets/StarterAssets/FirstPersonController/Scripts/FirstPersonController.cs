@@ -74,7 +74,23 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
-		private bool IsCurrentDeviceMouse
+		private bool prevGroundState;
+
+		private bool justLandedOnGround = false;
+
+		public float TimeFalling = 0.0f;
+
+		[SerializeField] private float minTimeFallingBeforePlayLandingSound = 0.13f;
+
+        [SerializeField] private float playerFootStepSoundDelay = 10f;
+        [SerializeField] private float currentPlayerFootStepSoundDelay;
+
+		[SerializeField] private AudioSource feetAudioSource;
+
+		[SerializeField] private AudioClip[] footstepAudioClips;
+		[SerializeField] private AudioClip[] landingAudioClips;
+
+        private bool IsCurrentDeviceMouse
 		{
 			get
 			{
@@ -88,8 +104,10 @@ namespace StarterAssets
 
 		private void Awake()
 		{
-			// get a reference to our main camera
-			if (_mainCamera == null)
+			currentPlayerFootStepSoundDelay = playerFootStepSoundDelay;
+
+            // get a reference to our main camera
+            if (_mainCamera == null)
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
@@ -97,6 +115,7 @@ namespace StarterAssets
 
 		private void Start()
 		{
+			prevGroundState = Grounded;
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
@@ -110,15 +129,15 @@ namespace StarterAssets
 			_fallTimeoutDelta = FallTimeout;
 		}
 
-		bool lastValue = true;
+		bool lastInputValue = true;
 
 		private void FixedUpdate()
 		{
 			if (!Game.GamePaused)
 			{
-                if (Game.CanUseInput != lastValue)
+                if (Game.CanUseInput != lastInputValue)
                 {
-                    lastValue = Game.CanUseInput;
+                    lastInputValue = Game.CanUseInput;
 
                     if (!Game.CanUseInput)
                     {
@@ -130,7 +149,28 @@ namespace StarterAssets
                     }
                 }
 
-                GroundedCheck();
+				GroundedCheck();
+
+				if (!Grounded)
+				{
+					TimeFalling += Time.deltaTime;
+				}
+
+				if (justLandedOnGround)
+				{
+					TimeFalling = 0f;
+                }
+
+                if (prevGroundState != Grounded)
+                {
+                    prevGroundState = Grounded;
+					justLandedOnGround = true;
+                }
+				else
+				{
+                    justLandedOnGround = false;
+                }
+
                 JumpAndGravity();
                 Move();
             }
@@ -218,6 +258,34 @@ namespace StarterAssets
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+
+
+
+			//Play sound according to the player movement
+			currentPlayerFootStepSoundDelay -= _speed * Time.deltaTime;
+
+			if (justLandedOnGround && TimeFalling > minTimeFallingBeforePlayLandingSound)
+			{
+                currentPlayerFootStepSoundDelay = playerFootStepSoundDelay;
+
+                var rndNum = Random.Range(0, landingAudioClips.Length);
+
+                feetAudioSource.clip = landingAudioClips[rndNum];
+                feetAudioSource.Play();
+            }
+			else if (currentPlayerFootStepSoundDelay <= 0)
+			{
+                if (Grounded)
+                {
+                    currentPlayerFootStepSoundDelay = playerFootStepSoundDelay;
+
+					var rndNum = Random.Range(0, footstepAudioClips.Length);
+
+					feetAudioSource.clip = footstepAudioClips[rndNum];
+					feetAudioSource.Play();
+
+				}
+			}
 		}
 
 		private void JumpAndGravity()

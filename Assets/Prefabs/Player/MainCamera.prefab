@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6967965971284884557}
   - component: {fileID: 248491899963097941}
   - component: {fileID: 8905816641804622247}
+  - component: {fileID: 8062918342834193911}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -174,6 +175,29 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!164 &8062918342834193911
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681507781566313675}
+  m_Enabled: 1
+  m_DryLevel: -150
+  m_Room: -955
+  m_RoomHF: -1085
+  m_DecayTime: 1.91
+  m_DecayHFRatio: 0.54
+  m_ReflectionsLevel: -370
+  m_ReverbLevel: 1030
+  m_ReverbDelay: 0.011
+  m_Diffusion: 100
+  m_Density: 60
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0.027
+  m_ReverbPreset: 27
 --- !u!1001 &1590137103246529310
 PrefabInstance:
   m_ObjectHideFlags: 0

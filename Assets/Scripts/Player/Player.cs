@@ -41,9 +41,7 @@ public class Player : ProjectBehaviour
     [SerializeField] private LayerMask grabeableObjectMask;
     [SerializeField] private LayerMask pixelMask;
 
-    [SerializeField] private SpringJoint jointData;
-    [SerializeField] private SpringJoint joint;
-    private Transform jointTransform;
+    [SerializeField] private ObjectHolder objectHolder;
 
     RaycastHit lastHitObject;
 
@@ -138,11 +136,21 @@ public class Player : ProjectBehaviour
         //jointData.enablePreprocessing = true;
         //jointData.maxDistance = 0;
         //jointData.minDistance = 0;
-        jointTransform = joint.gameObject.transform;
     }
 
     private void Update()
     {
+        if (objectHolder.AttachedRigidbody == null)
+        {
+            if (lastHitObject.transform != null)
+            {
+                lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
+            }
+
+            grabbedSomeThing = false;
+            objectHolder.AttachedRigidbody = null;
+        }
+
         if (Health != MaxHealth)
         {
             if (!Game.PlayerDied)
@@ -172,7 +180,7 @@ public class Player : ProjectBehaviour
             {
                 _input.cursorInputForLook = false;
                 _input.cursorLocked = false;
-                Game.GamePaused = true;
+                PauseGame();
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
@@ -180,7 +188,7 @@ public class Player : ProjectBehaviour
             {
                 _input.cursorInputForLook = true;
                 _input.cursorLocked = true;
-                Game.GamePaused = false;
+                ResumeGame();
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
@@ -193,7 +201,7 @@ public class Player : ProjectBehaviour
             {
                 _input.cursorInputForLook = false;
                 _input.cursorLocked = false;
-                Game.GamePaused = true;
+                PauseGame();
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
@@ -201,7 +209,7 @@ public class Player : ProjectBehaviour
             {
                 _input.cursorInputForLook = true;
                 _input.cursorLocked = true;
-                Game.GamePaused = false;
+                ResumeGame();
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
@@ -293,7 +301,7 @@ public class Player : ProjectBehaviour
     private void PlayerDeath()
     {
         Game.PlayerDied = true;
-        Game.CanUseInput = false;
+        DisableInput();
         redScreenOverlay.SetActive(true);
         DamageASec = 40f;
     }
@@ -361,7 +369,7 @@ public class Player : ProjectBehaviour
     {
         if (grabbedSomeThing == false)
         {
-            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 3, grabeableObjectMask))
+            if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out RaycastHit hit, 2.2f, grabeableObjectMask))
             {
                 lastHitObject = hit;
                 Debug.DrawLine(mainCamera.transform.position, mainCamera.transform.position + (mainCamera.transform.forward * 3), Color.magenta, 5f);
@@ -369,7 +377,7 @@ public class Player : ProjectBehaviour
                 lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectHeld();
 
                 grabbedSomeThing = true;
-                joint.connectedBody = hit.rigidbody;
+                objectHolder.AttachedRigidbody = hit.rigidbody;
             }
         }
         else
@@ -377,7 +385,7 @@ public class Player : ProjectBehaviour
             lastHitObject.transform.gameObject.GetComponent<MoveableObject>().ObjectLetGoOf();
 
             grabbedSomeThing = false;
-            joint.connectedBody = null;
+            objectHolder.AttachedRigidbody = null;
         }
     }
 
@@ -421,8 +429,8 @@ public class Player : ProjectBehaviour
         distanceBetweenPixelsX = pictureSizeX / pixelsInPictureOn1Line;
         distanceBetweenPixelsY = pictureSizeY / pixelsInPictureOn1Line;
 
-        Game.CanUseInput = false;
-
+        DisableInput();
+        
         if (currentXLine < pixelsInPictureOn1Line)
         {
             screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenPixelsY);
@@ -462,7 +470,7 @@ public class Player : ProjectBehaviour
         }
         else
         {
-            Game.CanUseInput = true;
+            EnableInput();
             drawPictureNextFixedUpdate = false;
             currentXLine = 0;
             currentYLine = 0;

@@ -7,15 +7,40 @@ public class ProjectBehaviour : MonoBehaviour
     public static GameManager Game;
     private static string saveDataPath = Application.dataPath + "/save.txt";
     public static SaveGame currentSaveGameData = new SaveGame();
+    public static float GameSpeed = 1.0f;
 
     public static void ApplicationStarted()
     {
         Load();
     }
 
+    public static void PauseGame()
+    {
+        Time.timeScale = 0f;
+        Game.GamePaused = true;
+    }
+
+    public static void ResumeGame()
+    {
+        Time.timeScale = GameSpeed;
+        Game.GamePaused = false;
+    }
+
+    public static void DisableInput()
+    {
+        Game.CanUseInput = false;
+    }
+
+    public static void EnableInput()
+    {
+        Game.CanUseInput = true;
+    }
+
     public static void GameStart()
     {
         Game = new GameManager();
+        EnableInput();
+        ResumeGame();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Game.PlayerDied = false;
@@ -75,7 +100,12 @@ public class ProjectBehaviour : MonoBehaviour
 
     public static void SetGameSpeed(float value)
     {
-        Time.timeScale = value;
+        GameSpeed = value;
+
+        if (!Game.GamePaused)
+        {
+            Time.timeScale = GameSpeed;
+        }
     }
 }
 

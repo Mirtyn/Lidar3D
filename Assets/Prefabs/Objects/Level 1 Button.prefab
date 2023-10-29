@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCustomText: 0
-  buttonTitle: Level 2
+  buttonTitle: Level 1
   buttonDescription: 
   useCustomImage: 0
   firstImage: {fileID: 21300000, guid: 38340bddddb8e144bb494c2fb76b878b, type: 3}
@@ -377,7 +377,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -437,6 +437,8 @@ MonoBehaviour:
   button: {fileID: 7855158224857484518}
   lockImage: {fileID: 3989781346931119996}
   highlightedGlow: {fileID: 4946885826727030543}
+  frameGlow: {fileID: 7550956724659384536}
+  backGlow: {fileID: 5372245312730471437}
   unlockedColor: {r: 0.3882353, g: 0.7764706, b: 1, a: 0.39215687}
   lockedColor: {r: 0.94509804, g: 0, b: 0, a: 0.39215687}
 --- !u!1 &3388862660221448300
@@ -902,7 +904,7 @@ MonoBehaviour:
   UIManagerAsset: {fileID: 11400000, guid: ed935159a86a1be4cbc1c44848b24daf, type: 2}
   imageObject: {fileID: 5372245312730471437}
   keepAlphaValue: 1
-  useCustomColor: 0
+  useCustomColor: 1
   colorType: 0
 --- !u!114 &1718448568945393628
 MonoBehaviour:
@@ -1109,7 +1111,7 @@ MonoBehaviour:
   UIManagerAsset: {fileID: 11400000, guid: ed935159a86a1be4cbc1c44848b24daf, type: 2}
   imageObject: {fileID: 7550956724659384536}
   keepAlphaValue: 1
-  useCustomColor: 0
+  useCustomColor: 1
   colorType: 0
 --- !u!1 &8095236272059588666
 GameObject:
