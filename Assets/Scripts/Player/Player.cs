@@ -395,10 +395,12 @@ public class Player : ProjectBehaviour
         for (int i = 0; i < timesDrawRaysForPixelRemoval; i++)
         {
             Physics.Raycast(mainCamera.transform.position, new Vector3(mainCamera.transform.forward.x + Random.Range(-0.15f, 0.15f), mainCamera.transform.forward.y + Random.Range(-0.15f, 0.15f), mainCamera.transform.forward.z + Random.Range(-0.15f, 0.15f)), out RaycastHit hit, maxRaycastDistance, pixelMask);
-
-            if (hit.transform != null)
+            if (hit.transform != null && hit.transform.gameObject.layer == 6)
             {
                 RemovePixel(hit.transform.gameObject);
+            }
+            else if (hit.transform != null && hit.transform.gameObject.layer != 6) 
+q           {
             }
         }
     }
@@ -602,14 +604,31 @@ public class Player : ProjectBehaviour
 
         if (go == null)
         {
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, hit.transform);
+
+            i.transform.localScale = new Vector3(1 / hit.transform.localScale.x, 1 / hit.transform.localScale.y, 1 / hit.transform.localScale.z);
+
+            //var pixel = i.GetComponent<Pixel>();
+
+            //pixel.Parent = hit.transform;
+
             pixels.Add(i);
         }
         else if (go.GetComponent<Pixel>().PixelColour != pixelColour)
         {
+
             Destroy(go);
+            
             pixels.Remove(go);
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+            
+            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, hit.transform);
+
+            i.transform.localScale = new Vector3(i.transform.localScale.x / hit.transform.localScale.x, i.transform.localScale.y / hit.transform.localScale.y, i.transform.localScale.z / hit.transform.localScale.z);
+            
+            //var pixel = i.GetComponent<Pixel>();
+
+            //pixel.Parent = hit.transform;
+
             pixels.Add(i);
         }
     }

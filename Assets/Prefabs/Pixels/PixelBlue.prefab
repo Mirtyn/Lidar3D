@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PixelColour: 3
+  VisualPositionWorldSpace: {x: 0, y: 0, z: 0}
 --- !u!65 &8936647614988811067
 BoxCollider:
   m_ObjectHideFlags: 0
