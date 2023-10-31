@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 using Input = UnityEngine.Input;
+using static UnityEditor.PlayerSettings;
 
 public class Player : ProjectBehaviour
 {
@@ -21,21 +22,23 @@ public class Player : ProjectBehaviour
 
     private float maxRaycastDistance = 1000f;
 
-    [SerializeField] Transform pixelsParent;
+    [SerializeField] Transform voxelsParent;
 
-    [SerializeField] GameObject pixelWhite;
-    [SerializeField] GameObject pixelBlue;
-    [SerializeField] GameObject pixelRed;
-    [SerializeField] GameObject pixelMagenta;
-    [SerializeField] GameObject pixelGray;
-    [SerializeField] GameObject pixelGreen;
+    [SerializeField] GameObject voxelWhite;
+    [SerializeField] GameObject voxelBlue;
+    [SerializeField] GameObject voxelRed;
+    [SerializeField] GameObject voxelMagenta;
+    [SerializeField] GameObject voxelGray;
+    [SerializeField] GameObject voxelGreen;
 
-    private List<GameObject> pixels = new List<GameObject>();
+    private List<GameObject> voxels = new List<GameObject>();
+    private List<GameObject> flashLightVoxels = new List<GameObject>();
 
     bool drawPictureNextFixedUpdate = false;
     bool tryGrabObjectNextFixedUpdate = false;
     bool draw1RandomDirLineFixedUpdate = false;
     bool drawDirLineForPixelRemovalFixedUpdate = false;
+    bool useFlashLight = false;
 
     [SerializeField] private LayerMask mapMask;
     [SerializeField] private LayerMask grabeableObjectMask;
@@ -67,6 +70,9 @@ public class Player : ProjectBehaviour
     [SerializeField] private GameObject console;
     [SerializeField] private GameObject pausedMenu;
     public GameObject Lights;
+
+    private float timeBetweenFlashUpdate = 0.029f;
+    private float timeBetweenFlashUpdateDelta;
 
     private void OnCollisionStay(Collision collision)
     {
@@ -102,6 +108,8 @@ public class Player : ProjectBehaviour
 
     private void Awake()
     {
+        timeBetweenFlashUpdateDelta = timeBetweenFlashUpdate;
+
         Instance = this;
 
         ProjectBehaviour.GameStart();
@@ -306,6 +314,8 @@ public class Player : ProjectBehaviour
         DamageASec = 40f;
     }
 
+    bool prevFlashLightValue = false;
+
     private void FixedUpdate()
     {
         if (!Game.GamePaused)
@@ -326,7 +336,7 @@ public class Player : ProjectBehaviour
             {
                 drawDirLineForPixelRemovalFixedUpdate = false;
 
-                DrawRaysForPixelRemoval();
+                DrawRaysForVoxelRemoval();
             }
 
             if (tryGrabObjectNextFixedUpdate)
@@ -334,6 +344,38 @@ public class Player : ProjectBehaviour
                 tryGrabObjectNextFixedUpdate = false;
 
                 TryGrabObject();
+            }
+
+            if (prevFlashLightValue != useFlashLight)
+            {
+                prevFlashLightValue = useFlashLight;
+
+                if (useFlashLight)
+                {
+                    DrawFlashLightVoxels();
+                }
+                else
+                {
+                    RemoveFlashLightVoxels();
+                }
+            }
+            else
+            {
+                MoveFlashLightVoxels();
+            }
+
+            timeBetweenFlashUpdateDelta -= Time.deltaTime;
+
+            if (timeBetweenFlashUpdateDelta <= 0)
+            {
+                timeBetweenFlashUpdateDelta = timeBetweenFlashUpdate;
+
+                RemoveFlashLightVoxels();
+
+                if (useFlashLight)
+                {
+                    DrawFlashLightVoxels();
+                }
             }
         }
     }
@@ -353,6 +395,11 @@ public class Player : ProjectBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
+                useFlashLight = !useFlashLight;
+            }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
                 drawPictureNextFixedUpdate = true;
             }
 
@@ -361,6 +408,99 @@ public class Player : ProjectBehaviour
                 tryGrabObjectNextFixedUpdate = true;
             }
         }
+    }
+
+    int amountPointsInRing = 4;
+    double radius = 5d * Screen.height / 1080;
+
+    private void DrawFlashLightVoxels()
+    {
+        List<Vector2> vectors = DrawCircleWithPoints(amountPointsInRing, radius, new Vector2(Screen.width / 2, Screen.height / 2));
+
+        for (int i = 0;  i < vectors.Count; i++)
+        {
+            Vector3 pos = vectors[i];
+            Ray ray = mainCamera.ScreenPointToRay(pos);
+
+            List<RaycastHit> hit = new List<RaycastHit>();
+            hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
+
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
+
+            CheckVoxelColour(hit, false);
+        }
+    }
+
+    private void MoveFlashLightVoxels()
+    {
+        List<Vector2> vectors = DrawCircleWithPoints(amountPointsInRing, radius, new Vector2(Screen.width / 2, Screen.height / 2));
+
+        for (int i = 0; i < flashLightVoxels.Count; i++)
+        {
+            Vector3 pos = vectors[i];
+            Ray ray = mainCamera.ScreenPointToRay(pos);
+
+            List<RaycastHit> hit = new List<RaycastHit>();
+            hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
+
+            Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
+            ReturnPixel rp = CheckVoxelColour(hit, flashLightVoxels[i].GetComponent<Pixel>(), false);
+            if (rp.b)
+            {
+                Destroy(flashLightVoxels[i]);
+                flashLightVoxels.Remove(flashLightVoxels[i]);
+            }
+            else
+            {
+                if (!(rp.pos == Vector3.positiveInfinity))
+                {
+                    flashLightVoxels[i].transform.position = rp.pos;
+                }
+                else
+                {
+                    Destroy(flashLightVoxels[i]);
+                    flashLightVoxels.Remove(flashLightVoxels[i]);
+                }
+            }
+        }
+    }
+
+    private void RemoveFlashLightVoxels()
+    {
+        for (int i = 0; i < flashLightVoxels.Count; i++)
+        {
+            Destroy(flashLightVoxels[i]);
+        }
+
+        flashLightVoxels.Clear();
+    }
+
+    private List<Vector2> DrawCircleWithPoints(int pointsInRing, double radius, Vector2 center)
+    {
+        double d = radius;
+        radius = 0;
+
+        List<Vector2> vectors = new List<Vector2>();
+
+        for (int i = 0; i < 10; i++)
+        {
+            radius += d * i;
+            pointsInRing++;
+
+            double spaceBetweenPoints = 360 / pointsInRing;
+
+            for (int j = 0; j < pointsInRing; j++)
+            {
+                double angle = (spaceBetweenPoints * j);
+
+                double newX = center.x + radius * Math.Cos(angle * Math.PI / 180);
+                double newY = center.y + radius * Math.Sin(angle * Math.PI / 180);
+
+                vectors.Add(new Vector2((float)newX, (float)newY));
+            }
+        }
+
+        return vectors;
     }
 
     bool grabbedSomeThing = false;
@@ -389,18 +529,16 @@ public class Player : ProjectBehaviour
         }
     }
 
-    int timesDrawRaysForPixelRemoval = 8;
-    private void DrawRaysForPixelRemoval()
+    int timesDrawRaysForVoxelRemoval = 8;
+    private void DrawRaysForVoxelRemoval()
     {
-        for (int i = 0; i < timesDrawRaysForPixelRemoval; i++)
+        for (int i = 0; i < timesDrawRaysForVoxelRemoval; i++)
         {
             Physics.Raycast(mainCamera.transform.position, new Vector3(mainCamera.transform.forward.x + Random.Range(-0.15f, 0.15f), mainCamera.transform.forward.y + Random.Range(-0.15f, 0.15f), mainCamera.transform.forward.z + Random.Range(-0.15f, 0.15f)), out RaycastHit hit, maxRaycastDistance, pixelMask);
+            
             if (hit.transform != null && hit.transform.gameObject.layer == 6)
             {
-                RemovePixel(hit.transform.gameObject);
-            }
-            else if (hit.transform != null && hit.transform.gameObject.layer != 6) 
-q           {
+                RemoveVoxel(hit.transform.gameObject);
             }
         }
     }
@@ -410,16 +548,16 @@ q           {
         List<RaycastHit> hit = new List<RaycastHit>();
         hit = Physics.RaycastAll(mainCamera.transform.position, new Vector3(mainCamera.transform.forward.x + Random.Range(-0.2f, 0.2f), mainCamera.transform.forward.y + Random.Range(-0.2f, 0.2f), mainCamera.transform.forward.z + Random.Range(-0.2f, 0.2f)), maxRaycastDistance, mapMask).ToList();
 
-        CheckPixelColour(hit);
+        CheckVoxelColour(hit, true);
     }
 
     float pictureSizeX = 800f * Screen.width / 1920;
     float pictureSizeY = 800f * Screen.height / 1080;
 
-    int pixelsInPictureOn1Line = 10;
+    int voxelsInPictureOn1Line = 10;
 
-    float distanceBetweenPixelsX;
-    float distanceBetweenPixelsY;
+    float distanceBetweenVoxelsX;
+    float distanceBetweenVoxelsY;
 
     Vector3 screenPos = Vector3.zero;
 
@@ -428,16 +566,16 @@ q           {
 
     private void DrawPicture()
     {
-        distanceBetweenPixelsX = pictureSizeX / pixelsInPictureOn1Line;
-        distanceBetweenPixelsY = pictureSizeY / pixelsInPictureOn1Line;
+        distanceBetweenVoxelsX = pictureSizeX / voxelsInPictureOn1Line;
+        distanceBetweenVoxelsY = pictureSizeY / voxelsInPictureOn1Line;
 
         DisableInput();
         
-        if (currentXLine < pixelsInPictureOn1Line)
+        if (currentXLine < voxelsInPictureOn1Line)
         {
-            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenPixelsY);
+            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenVoxelsY);
 
-            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenPixelsX);
+            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenVoxelsX);
 
             Ray ray = mainCamera.ScreenPointToRay(screenPos);
 
@@ -446,18 +584,18 @@ q           {
 
             Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
 
-            CheckPixelColour(hit);
+            CheckVoxelColour(hit, true);
 
             currentXLine++;
         }
-        else if (currentYLine < pixelsInPictureOn1Line - 1)
+        else if (currentYLine < voxelsInPictureOn1Line - 1)
         {
             currentXLine = 0;
             currentYLine++;
 
-            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenPixelsY);
+            screenPos.y = ((Screen.height / 2) - pictureSizeY / 2) + (currentYLine * distanceBetweenVoxelsY);
 
-            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenPixelsX);
+            screenPos.x = ((Screen.width / 2) - pictureSizeX / 2) + (currentXLine * distanceBetweenVoxelsX);
 
             Ray ray = mainCamera.ScreenPointToRay(screenPos);
 
@@ -466,7 +604,7 @@ q           {
 
             Debug.DrawRay(ray.origin, ray.direction, Color.red, 5);
 
-            CheckPixelColour(hit);
+            CheckVoxelColour(hit, true);
 
             currentXLine++;
         }
@@ -511,20 +649,28 @@ q           {
     //    yield break;
     //}
 
-    private void CheckPixelColour(List<RaycastHit> hit)
+    private ReturnPixel CheckVoxelColour(List<RaycastHit> hit, Pixel voxel, bool permanent)
     {
         if (hit.Count != 0)
         {
             hit = hit.OrderBy(hit => hit.distance).ToList();
 
             RaycastHit raycastHitTrigger = new RaycastHit();
-            Pixel._PixelColour pixelColour = Pixel._PixelColour.White;
+            Pixel._VoxelColour voxelColour = Pixel._VoxelColour.White;
 
             //DrawPixel(hit, Pixel._PixelColour.White);
 
             if (hit.Count == 1)
             {
-                DrawPixel(hit[0], pixelColour);
+                if (voxel.VoxelColour != voxelColour)
+                {
+                    DrawVoxel(hit[0], voxelColour, permanent);
+                    return new ReturnPixel(true, new Vector3((float)Math.Round(hit[0].point.x, 1), (float)Math.Round(hit[0].point.y, 1), (float)Math.Round(hit[0].point.z, 1)));
+                }
+                else
+                {
+                    return new ReturnPixel(false, new Vector3((float)Math.Round(hit[0].point.x, 1), (float)Math.Round(hit[0].point.y, 1), (float)Math.Round(hit[0].point.z, 1)));
+                }
             }
 
             if (hit.Count >= 2)
@@ -533,43 +679,43 @@ q           {
                 {
                     if (hit[i].transform.CompareTag(PUSHEABLE_OBJECT_TAG))
                     {
-                        if (pixelColour == Pixel._PixelColour.White)
+                        if (voxelColour == Pixel._VoxelColour.White)
                         {
-                            pixelColour = Pixel._PixelColour.Blue;
+                            voxelColour = Pixel._VoxelColour.Blue;
                         }
                         raycastHitTrigger = hit[i];
                         break;
                     }
                     else if (hit[i].transform.CompareTag(BUTTON_TAG))
                     {
-                        if (pixelColour == Pixel._PixelColour.White)
+                        if (voxelColour == Pixel._VoxelColour.White)
                         {
-                            pixelColour = Pixel._PixelColour.Magenta;
+                            voxelColour = Pixel._VoxelColour.Magenta;
                         }
                         raycastHitTrigger = hit[i];
                         break;
                     }
                     else if (hit[i].transform.CompareTag(ENEMY_TAG))
                     {
-                        if (pixelColour == Pixel._PixelColour.White)
+                        if (voxelColour == Pixel._VoxelColour.White)
                         {
-                            pixelColour = Pixel._PixelColour.Red;
+                            voxelColour = Pixel._VoxelColour.Red;
                         }
                     }
                     else if (hit[i].transform.CompareTag(DOOR_TAG))
                     {
-                        if (pixelColour == Pixel._PixelColour.White)
+                        if (voxelColour == Pixel._VoxelColour.White)
                         {
-                            pixelColour = Pixel._PixelColour.Gray;
+                            voxelColour = Pixel._VoxelColour.Gray;
                         }
                         raycastHitTrigger = hit[i];
                         break;
                     }
                     else if (hit[i].transform.CompareTag(MOVING_PLATFORM_TAG))
                     {
-                        if (pixelColour == Pixel._PixelColour.White)
+                        if (voxelColour == Pixel._VoxelColour.White)
                         {
-                            pixelColour = Pixel._PixelColour.Green;
+                            voxelColour = Pixel._VoxelColour.Green;
                         }
                         raycastHitTrigger = hit[i];
                         break;
@@ -581,62 +727,173 @@ q           {
                     }
                 }
 
-                DrawPixel(raycastHitTrigger, pixelColour);
+                if (voxel.VoxelColour != voxelColour)
+                {
+                    DrawVoxel(raycastHitTrigger, voxelColour, permanent);
+                    return new ReturnPixel(true, new Vector3((float)Math.Round(raycastHitTrigger.point.x, 1), (float)Math.Round(raycastHitTrigger.point.y, 1), (float)Math.Round(raycastHitTrigger.point.z, 1)));
+                }
+                else
+                {
+                    return new ReturnPixel(false, new Vector3((float)Math.Round(raycastHitTrigger.point.x, 1), (float)Math.Round(raycastHitTrigger.point.y, 1), (float)Math.Round(raycastHitTrigger.point.z, 1)));
+                }
+            }
+            else
+            {
+                Vector3 v3 = Vector3.negativeInfinity;
+                return new ReturnPixel(false, v3);
+            }
+        }
+        else
+        {
+            Vector3 v3 = Vector3.negativeInfinity;
+            return new ReturnPixel(false, v3);
+        }
+    }
+
+    private void CheckVoxelColour(List<RaycastHit> hit, bool permanent)
+    {
+        if (hit.Count != 0)
+        {
+            hit = hit.OrderBy(hit => hit.distance).ToList();
+
+            RaycastHit raycastHitTrigger = new RaycastHit();
+            Pixel._VoxelColour voxelColour = Pixel._VoxelColour.White;
+
+            //DrawPixel(hit, Pixel._PixelColour.White);
+
+            if (hit.Count == 1)
+            {
+                DrawVoxel(hit[0], voxelColour, permanent);
+            }
+
+            if (hit.Count >= 2)
+            {
+                for (int i = 0; i < hit.Count; i++)
+                {
+                    if (hit[i].transform.CompareTag(PUSHEABLE_OBJECT_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Blue;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
+                    else if (hit[i].transform.CompareTag(BUTTON_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Magenta;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
+                    else if (hit[i].transform.CompareTag(ENEMY_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Red;
+                        }
+                    }
+                    else if (hit[i].transform.CompareTag(DOOR_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Gray;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
+                    else if (hit[i].transform.CompareTag(MOVING_PLATFORM_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Green;
+                        }
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
+                    else
+                    {
+                        raycastHitTrigger = hit[i];
+                        break;
+                    }
+                }
+
+                DrawVoxel(raycastHitTrigger, voxelColour, permanent);
             }
         }
     }
 
-    private void DrawPixel(RaycastHit hit, Pixel._PixelColour pixelColour)
+    private void DrawVoxel(RaycastHit hit, Pixel._VoxelColour voxelColour, bool permanent)
     {
         Vector3 pos = new Vector3((float)Math.Round(hit.point.x, 1), (float)Math.Round(hit.point.y, 1), (float)Math.Round(hit.point.z, 1));
       
-        GameObject go = pixels.SingleOrDefault<GameObject>(g => g.transform.position == pos);
+        GameObject go = voxels.SingleOrDefault<GameObject>(g => g.transform.position == pos);
 
-        GameObject pixelPrefab = pixelColour switch
+        GameObject voxelPrefab = voxelColour switch
         {
-            Pixel._PixelColour.Red => pixelRed,
-            Pixel._PixelColour.Blue => pixelBlue,
-            Pixel._PixelColour.Magenta => pixelMagenta,
-            Pixel._PixelColour.Gray => pixelGray,
-            Pixel._PixelColour.Green => pixelGreen,
-            _ => pixelWhite,
+            Pixel._VoxelColour.Red => voxelRed,
+            Pixel._VoxelColour.Blue => voxelBlue,
+            Pixel._VoxelColour.Magenta => voxelMagenta,
+            Pixel._VoxelColour.Gray => voxelGray,
+            Pixel._VoxelColour.Green => voxelGreen,
+            _ => voxelWhite,
         };
 
-        if (go == null)
+        if (!permanent)
         {
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, hit.transform);
+            GameObject i = Instantiate(voxelPrefab, pos, Quaternion.identity, voxelsParent);
 
-            i.transform.localScale = new Vector3(1 / hit.transform.localScale.x, 1 / hit.transform.localScale.y, 1 / hit.transform.localScale.z);
+            var p = i.GetComponent<Pixel>();
+            p.Permanent = false;
+
+            flashLightVoxels.Add(i);
+        }
+        else if (go == null)
+        {
+            GameObject i = Instantiate(voxelPrefab, pos, Quaternion.identity, voxelsParent);
+
+            var p = i.GetComponent<Pixel>();
+            p.Parent = hit.transform;
+            p.Offset = pos - hit.transform.position;
+            p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+
+            //i.transform.localScale = new Vector3(1 / hit.transform.localScale.x, 1 / hit.transform.localScale.y, 1 / hit.transform.localScale.z);
 
             //var pixel = i.GetComponent<Pixel>();
 
             //pixel.Parent = hit.transform;
 
-            pixels.Add(i);
+            voxels.Add(i);
         }
-        else if (go.GetComponent<Pixel>().PixelColour != pixelColour)
+        else if (go.GetComponent<Pixel>().VoxelColour != voxelColour)
         {
-
             Destroy(go);
             
-            pixels.Remove(go);
+            voxels.Remove(go);
             
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, hit.transform);
+            GameObject i = Instantiate(voxelPrefab, pos, Quaternion.identity, voxelsParent);
 
-            i.transform.localScale = new Vector3(i.transform.localScale.x / hit.transform.localScale.x, i.transform.localScale.y / hit.transform.localScale.y, i.transform.localScale.z / hit.transform.localScale.z);
-            
+            var p = i.GetComponent<Pixel>();
+            p.Parent = hit.transform;
+            p.Offset = pos - hit.transform.position;
+            p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+
+            //i.transform.localScale = new Vector3(i.transform.localScale.x / hit.transform.localScale.x, i.transform.localScale.y / hit.transform.localScale.y, i.transform.localScale.z / hit.transform.localScale.z);
+
             //var pixel = i.GetComponent<Pixel>();
 
             //pixel.Parent = hit.transform;
 
-            pixels.Add(i);
+            voxels.Add(i);
         }
     }
 
-    private void RemovePixel(GameObject pixel)
+    private void RemoveVoxel(GameObject voxel)
     {
-        Destroy(pixel);
-        pixels.Remove(pixel);
+        Destroy(voxel);
+        voxels.Remove(voxel);
     }
 
     public void SetPlayerHealthToMax()
@@ -647,5 +904,17 @@ q           {
     public void KillPlayer()
     {
         Health = -1f;
+    }
+}
+
+public class ReturnPixel
+{
+    public bool b;
+    public Vector3 pos;
+
+    public ReturnPixel(bool value, Vector3 position)
+    {
+        b = value; 
+        pos = position;
     }
 }

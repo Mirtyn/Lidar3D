@@ -65,7 +65,7 @@ public class MainMenuCamera : MonoBehaviour
             hit = hit.OrderBy(hit => hit.distance).ToList();
 
             RaycastHit raycastHitTrigger = new RaycastHit();
-            Pixel._PixelColour pixelColour = Pixel._PixelColour.White;
+            Pixel._VoxelColour pixelColour = Pixel._VoxelColour.White;
 
             //DrawPixel(hit, Pixel._PixelColour.White);
 
@@ -81,13 +81,13 @@ public class MainMenuCamera : MonoBehaviour
                     raycastHitTrigger = hit[i];
                     break;
                 }
-            }
 
-            DrawPixel(raycastHitTrigger, pixelColour);
+                DrawPixel(raycastHitTrigger, pixelColour);
+            }
         }
     }
 
-    private void DrawPixel(RaycastHit hit, Pixel._PixelColour pixelColour)
+    private void DrawPixel(RaycastHit hit, Pixel._VoxelColour pixelColour)
     {
         Vector3 pos = new Vector3((float)Math.Round(hit.point.x, 1), (float)Math.Round(hit.point.y, 1), (float)Math.Round(hit.point.z, 1));
 
@@ -116,13 +116,21 @@ public class MainMenuCamera : MonoBehaviour
         if (go == null)
         {
             GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+            var p = i.GetComponent<Pixel>();
+            p.Parent = hit.transform;
+            p.Offset = pos - hit.transform.position;
+            p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
             pixels.Add(i);
         }
-        else if (go.GetComponent<Pixel>().PixelColour != pixelColour)
+        else if (go.GetComponent<Pixel>().VoxelColour != pixelColour)
         {
             Destroy(go);
             pixels.Remove(go);
             GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+            var p = i.GetComponent<Pixel>();
+            p.Parent = hit.transform;
+            p.Offset = pos - hit.transform.position;
+            p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
             pixels.Add(i);
         }
     }

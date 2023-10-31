@@ -3,7 +3,9 @@ using System;
 
 public class Pixel : ProjectBehaviour
 {
-    public enum _PixelColour
+    public bool Permanent = true;
+
+    public enum _VoxelColour
     {
         White,
         Red,
@@ -13,9 +15,13 @@ public class Pixel : ProjectBehaviour
         Gray
     }
 
-    public _PixelColour PixelColour;
+    public _VoxelColour VoxelColour;
 
     //private float rangeBeforeChange = 0.1f;
+
+    public Transform Parent;
+    public Vector3 Offset;
+    public Quaternion RotOffset;
 
     private Transform pixelVisualTransform;
     public Vector3 VisualPositionWorldSpace;
@@ -28,17 +34,57 @@ public class Pixel : ProjectBehaviour
 
     private void Update()
     {
-        pixelVisualTransform.position = VisualPositionWorldSpace;
-
-        Vector3 pos = new Vector3((float)Math.Round(this.transform.position.x, 1), (float)Math.Round(this.transform.position.y, 1), (float)Math.Round(this.transform.position.z, 1));
-
-        if (VisualPositionWorldSpace != pos)
+        if (!Game.GamePaused)
         {
-            VisualPositionWorldSpace = pos;
-        }
+            if (Permanent)
+            {
+                if (StickyVoxels)
+                {
+                    // Position the object on top of the parent
+                    this.transform.position = Parent.position;
+                    // Set the rotation based on the parent and stored offset rotation
+                    this.transform.rotation = Parent.rotation * RotOffset;
+                    // Move the child back to the reference location
+                    this.transform.Translate(Offset);
 
-        pixelVisualTransform.eulerAngles = Vector3.zero;
+                    //this.transform.position = RotatePointAroundPivot(this.transform.position, Parent.position, Ofset);
+
+                    //this.transform.rotation = Parent.rotation;
+
+                    //this.transform.position = Parent.position + Ofset;
+
+                    //this.transform.RotateAround(Parent.position, Vector3.right, Ofset.x);
+                    //this.transform.RotateAround(Parent.position, Vector3.up, Ofset.);
+                    //this.transform.RotateAround(Parent.position, Vector3.forward, Ofset.z);
+
+                    pixelVisualTransform.position = VisualPositionWorldSpace;
+
+                    Vector3 pos = new Vector3((float)Math.Round(this.transform.position.x, 1), (float)Math.Round(this.transform.position.y, 1), (float)Math.Round(this.transform.position.z, 1));
+
+                    if (VisualPositionWorldSpace != pos)
+                    {
+                        VisualPositionWorldSpace = pos;
+                    }
+
+                    pixelVisualTransform.eulerAngles = Vector3.zero;
+                }
+            }
+        }
     }
+
+    public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+    {
+        return Quaternion.Euler(angles) * (point - pivot) + pivot;
+    }
+
+    private Vector3 RotatePointAroundPivot2(Vector3 point, Vector3 pivot, Vector3 angles) 
+    {
+        Vector3 dir = point - pivot; // get point direction relative to pivot
+        dir = Quaternion.Euler(angles)* dir; // rotate it
+        point = dir + pivot; // calculate rotated point
+        return point; // return it
+    }
+}
 
     //private void Update()
     //{
@@ -63,4 +109,4 @@ public class Pixel : ProjectBehaviour
 
     //    this.transform.eulerAngles = Vector3.zero;
     //}
-}
+

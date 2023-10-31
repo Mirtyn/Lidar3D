@@ -17,6 +17,7 @@ public class DebugController : ProjectBehaviour
     public static DebugCommand LIGHTS;
     public static DebugCommand LOAD_NEXT_LEVEL;
     public static DebugCommand RESTART_LEVEL;
+    public static DebugCommand STICKY_VOXELS;
 
     public List<object> commandList;
 
@@ -68,6 +69,11 @@ public class DebugController : ProjectBehaviour
             ReLoadCurrentLevel();
         });
 
+        STICKY_VOXELS = new DebugCommand("sticky_voxels", "makes voxels stay on their coresponding object", "sticky_voxels", () =>
+        {
+            StickyVoxels = !StickyVoxels;
+        });
+
         commandList = new List<object>()
         {
             HELP,
@@ -78,7 +84,8 @@ public class DebugController : ProjectBehaviour
             SET_GAME_SPEED,
             LIGHTS,
             LOAD_NEXT_LEVEL,
-            RESTART_LEVEL
+            RESTART_LEVEL,
+            STICKY_VOXELS
         };
     }
 
