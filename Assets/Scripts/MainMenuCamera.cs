@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MainMenuCamera : MonoBehaviour
+public class MainMenuCamera : ProjectBehaviour
 {
     private GameObject mainCamera;
 
@@ -21,11 +21,10 @@ public class MainMenuCamera : MonoBehaviour
     [SerializeField] private GameObject pixelRed;
     [SerializeField] private GameObject pixelGray;
 
-    //float T;
-    //float R;
-
     private void Awake()
     {
+        ProjectBehaviour.GameStart(true);
+
         mainCamera = this.gameObject;
         //T = Random.Range(2.22f, 4.5f);
         //R = Random.Range(0f, 100f);

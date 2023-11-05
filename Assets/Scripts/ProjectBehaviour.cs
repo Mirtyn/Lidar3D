@@ -38,14 +38,18 @@ public class ProjectBehaviour : MonoBehaviour
         Game.CanUseInput = true;
     }
 
-    public static void GameStart()
+    public static void GameStart(bool mainMenu)
     {
         Game = new GameManager();
-        EnableInput();
-        ResumeGame();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        Game.PlayerDied = false;
+
+        if (!mainMenu)
+        {
+            EnableInput();
+            ResumeGame();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Game.PlayerDied = false;
+        }
     }
 
     public static void ReLoadCurrentLevel()

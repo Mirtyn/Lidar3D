@@ -3,6 +3,8 @@ using System;
 
 public class Pixel : ProjectBehaviour
 {
+    [SerializeField] Material[] materials;
+
     public bool Permanent = true;
 
     public enum _VoxelColour
@@ -30,6 +32,19 @@ public class Pixel : ProjectBehaviour
     {
         pixelVisualTransform = transform.GetChild(0);
         VisualPositionWorldSpace = pixelVisualTransform.position;
+    }
+
+    public void SetMaterial()
+    {
+        pixelVisualTransform.GetComponent<Renderer>().material = VoxelColour switch
+        {
+            _VoxelColour.Red => materials[1],
+            _VoxelColour.Blue => materials[2],
+            _VoxelColour.Green => materials[3],
+            _VoxelColour.Gray => materials[4],
+            _VoxelColour.Magenta => materials[5],
+            _ => materials[0],
+        };
     }
 
     private void Update()
@@ -75,14 +90,6 @@ public class Pixel : ProjectBehaviour
     public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
     {
         return Quaternion.Euler(angles) * (point - pivot) + pivot;
-    }
-
-    private Vector3 RotatePointAroundPivot2(Vector3 point, Vector3 pivot, Vector3 angles) 
-    {
-        Vector3 dir = point - pivot; // get point direction relative to pivot
-        dir = Quaternion.Euler(angles)* dir; // rotate it
-        point = dir + pivot; // calculate rotated point
-        return point; // return it
     }
 }
 

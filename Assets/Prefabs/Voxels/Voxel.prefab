@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2847646130910277885}
   - component: {fileID: 7039245754883157284}
   m_Layer: 6
-  m_Name: PixelGreen
+  m_Name: Voxel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 110787ecffeb1f844a7785ab6c0ccffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PixelColour: 2
+  materials:
+  - {fileID: 2100000, guid: 3289823a5d48dec4bad86cb001998948, type: 2}
+  - {fileID: 2100000, guid: f7b5c22c7d6dfd542a715d22f2e00cb0, type: 2}
+  - {fileID: 2100000, guid: 7e0b10df2060b2a4f9fa3f9ecc54d182, type: 2}
+  - {fileID: 2100000, guid: c069772b8bcf7af45bb574b9994b264b, type: 2}
+  - {fileID: 2100000, guid: a463f045fc6832a4fb4a90baddd54b8d, type: 2}
+  - {fileID: 2100000, guid: 3e7daead4a7a6254b91ead9ac661f347, type: 2}
+  Permanent: 1
+  VoxelColour: 0
+  Parent: {fileID: 0}
+  Offset: {x: 0, y: 0, z: 0}
+  RotOffset: {x: 0, y: 0, z: 0, w: 0}
+  VisualPositionWorldSpace: {x: 0, y: 0, z: 0}
 --- !u!65 &7039245754883157284
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -129,7 +141,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c069772b8bcf7af45bb574b9994b264b, type: 2}
+  - {fileID: 2100000, guid: 3289823a5d48dec4bad86cb001998948, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
