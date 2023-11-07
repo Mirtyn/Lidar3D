@@ -65,7 +65,7 @@ public class Player : ProjectBehaviour
     [SerializeField] private GameObject pausedMenu;
     public GameObject Lights;
 
-    private float timeBetweenFlashUpdate = 0.029f;
+    private float timeBetweenFlashUpdate = 0.2f;
     private float timeBetweenFlashUpdateDelta;
 
     private void OnCollisionStay(Collision collision)
@@ -372,28 +372,75 @@ public class Player : ProjectBehaviour
 
             if (useFlashLight)
             {
+                //string g = Time.realtimeSinceStartupAsDouble.ToString();
+                //Debug.Log("g = " + g);
+
                 DrawFlashLightVoxels();
+
+                //string d = Time.realtimeSinceStartupAsDouble.ToString();
+                //Debug.Log("d = " + d);
             }
+
+
+            //timeBetweenFlashUpdateDelta += Time.deltaTime;
+
+            //if (timeBetweenFlashUpdateDelta >= timeBetweenFlashUpdate)
+            //{
+            //    timeBetweenFlashUpdateDelta = 0;
+
+            //    RemoveFlashLightVoxels();
+
+            //    if (useFlashLight)
+            //    {
+            //        //string g = Time.realtimeSinceStartupAsDouble.ToString();
+            //        //Debug.Log("g = " + g);
+
+            //        DrawFlashLightVoxels();
+
+            //        //string d = Time.realtimeSinceStartupAsDouble.ToString();
+            //        //Debug.Log("d = " + d);
+            //    }
+            //}
         }
     }
 
-    int amountPointsInRing = 4;
+    int amountPointsInRing = 0;
     double radius = 5d * Screen.height / 1080;
 
     private void DrawFlashLightVoxels()
     {
         List<Vector2> vectors = DrawCircleWithPoints(amountPointsInRing, radius, new Vector2(Screen.width / 2, Screen.height / 2));
 
+        //string g = Time.realtimeSinceStartupAsDouble.ToString();
+        //Debug.Log("g = " + g);
+
         for (int i = 0;  i < vectors.Count; i++)
         {
+            //string g = Time.realtimeSinceStartupAsDouble.ToString();
+            //Debug.Log("g = " + g);
+
             Vector3 pos = vectors[i];
             Ray ray = mainCamera.ScreenPointToRay(pos);
 
             List<RaycastHit> hit = new List<RaycastHit>();
             hit = Physics.RaycastAll(ray, maxRaycastDistance, mapMask).ToList();
 
-            CheckVoxelColour(hit, true);
+
+            //string d = Time.realtimeSinceStartupAsDouble.ToString();
+            //Debug.Log("d = " + d);
+
+            //string g = Time.realtimeSinceStartupAsDouble.ToString();
+            //Debug.Log("g = " + g);
+
+            CheckVoxelColour(hit, false);
+
+            //string d = Time.realtimeSinceStartupAsDouble.ToString();
+            //Debug.Log("d = " + d);
         }
+
+
+        //string d = Time.realtimeSinceStartupAsDouble.ToString();
+        //Debug.Log("d = " + d);
     }
 
     //private void MoveFlashLightVoxels()
@@ -514,6 +561,7 @@ public class Player : ProjectBehaviour
         hit = Physics.RaycastAll(mainCamera.transform.position, new Vector3(mainCamera.transform.forward.x + Random.Range(-0.2f, 0.2f), mainCamera.transform.forward.y + Random.Range(-0.2f, 0.2f), mainCamera.transform.forward.z + Random.Range(-0.2f, 0.2f)), maxRaycastDistance, mapMask).ToList();
 
         CheckVoxelColour(hit, true);
+
     }
 
     float pictureSizeX = 800f * Screen.width / 1920;
@@ -798,13 +846,17 @@ public class Player : ProjectBehaviour
 
         if (!permanent)
         {
-            GameObject voxel = ObjectPooler.current.GetPooledObject();
+            GameObject voxel = Instantiate(voxelPrefab, pos, Quaternion.identity);
 
-            if (voxel == null) { return; }
-            voxel.transform.position = pos;
-            voxel.transform.rotation = Quaternion.identity;
 
-            voxel.SetActive(true);
+            //GameObject voxel = ObjectPooler.current.GetPooledObject();
+
+            //if (voxel == null) { return; }
+            //voxel.transform.position = pos;
+            //voxel.transform.rotation = Quaternion.identity;
+
+
+            //voxel.SetActive(true);
 
             var p = voxel.GetComponent<Pixel>();
             p.VoxelColour = voxelColour;
