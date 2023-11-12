@@ -26,7 +26,7 @@ public class Player : ProjectBehaviour
     [SerializeField] GameObject voxelPrefab;
 
     public List<GameObject> voxels = new List<GameObject>();
-    //public static List<GameObject> flashLightVoxels = new List<GameObject>();
+    public static List<GameObject> flashLightVoxels = new List<GameObject>();
 
     bool drawPictureNextFixedUpdate = false;
     bool tryGrabObjectNextFixedUpdate = false;
@@ -318,10 +318,10 @@ public class Player : ProjectBehaviour
                 useFlashLight = !useFlashLight;
             }
 
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                drawPictureNextFixedUpdate = true;
-            }
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    drawPictureNextFixedUpdate = true;
+            //}
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -414,7 +414,7 @@ public class Player : ProjectBehaviour
         //string g = Time.realtimeSinceStartupAsDouble.ToString();
         //Debug.Log("g = " + g);
 
-        for (int i = 0;  i < vectors.Count; i++)
+        for (int i = 0; i < vectors.Count; i++)
         {
             //string g = Time.realtimeSinceStartupAsDouble.ToString();
             //Debug.Log("g = " + g);
@@ -846,27 +846,27 @@ public class Player : ProjectBehaviour
 
         if (!permanent)
         {
-            GameObject voxel = Instantiate(voxelPrefab, pos, Quaternion.identity);
+            //GameObject voxel = Instantiate(voxelPrefab, pos, Quaternion.identity);
 
 
-            //GameObject voxel = ObjectPooler.current.GetPooledObject();
+            GameObject voxel = ObjectPooler.current.GetPooledObject();
 
-            //if (voxel == null) { return; }
-            //voxel.transform.position = pos;
-            //voxel.transform.rotation = Quaternion.identity;
+            if (voxel == null) { return; }
+            voxel.transform.position = pos;
+            voxel.transform.rotation = Quaternion.identity;
 
 
-            //voxel.SetActive(true);
+            voxel.SetActive(true);
 
             var p = voxel.GetComponent<Pixel>();
-            p.VoxelColour = voxelColour;
-            p.SetMaterial();
-            p.Parent = hit.transform;
-            p.Offset = pos - hit.transform.position;
-            p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+            //p.VoxelColour = voxelColour;
+            //p.SetMaterial();
+            //p.Parent = hit.transform;
+            //p.Offset = pos - hit.transform.position;
+            //p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
             p.Permanent = false;
         }
-        else if (go == null)
+        if (go == null)
         {
             GameObject voxel = ObjectPooler.current.GetPooledObject();
 

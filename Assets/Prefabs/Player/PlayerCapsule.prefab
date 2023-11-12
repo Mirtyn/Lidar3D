@@ -357,7 +357,8 @@ MonoBehaviour:
   TopClamp: 89
   BottomClamp: -89
   TimeFalling: 0
-  playerFootStepSoundDelay: 1.8
+  minTimeFallingBeforePlayLandingSound: 0.12
+  playerFootStepSoundDelay: 1.6
   currentPlayerFootStepSoundDelay: 0
   feetAudioSource: {fileID: 1818258583443073250}
   footstepAudioClips:
@@ -529,19 +530,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
-  pixelsParent: {fileID: 0}
-  pixelWhite: {fileID: 3399251440707562350, guid: fcaaf828886e53943b22a8d9361fc523,
+  voxelsParent: {fileID: 0}
+  voxelPrefab: {fileID: 3399251440707562350, guid: fcaaf828886e53943b22a8d9361fc523,
     type: 3}
-  pixelBlue: {fileID: 3399251440707562350, guid: 3c6f4c27f0afb3548bf8d9c540046d3b,
-    type: 3}
-  pixelRed: {fileID: 3399251440707562350, guid: 96e753519561a7044b28917df3b0eedd,
-    type: 3}
-  pixelMagenta: {fileID: 3399251440707562350, guid: 38c9bc440ededd046a5d2d809d84f9c4,
-    type: 3}
-  pixelGray: {fileID: 3399251440707562350, guid: e13263bd672258e49a23fcd343f14cb3,
-    type: 3}
-  pixelGreen: {fileID: 3399251440707562350, guid: 10bb0fc570e3db046b0de5baefb58306,
-    type: 3}
+  voxels: []
   mapMask:
     serializedVersion: 2
     m_Bits: 2944

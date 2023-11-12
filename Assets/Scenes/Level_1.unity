@@ -1807,7 +1807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1576802658
 Transform:
   m_ObjectHideFlags: 0
@@ -2758,11 +2758,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 474285904720379088, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: playerFootStepSoundDelay
-      value: 1.6
-      objectReference: {fileID: 0}
     - target: {fileID: 1568165024435924340, guid: 9786c29f69b8e5c47affdce521d8fd35,
         type: 3}
       propertyPath: m_Name
@@ -2830,24 +2825,6 @@ PrefabInstance:
       objectReference: {fileID: 2091715688}
     - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
         type: 3}
-      propertyPath: voxelRed
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: 96e753519561a7044b28917df3b0eedd,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelBlue
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: 3c6f4c27f0afb3548bf8d9c540046d3b,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelGray
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: e13263bd672258e49a23fcd343f14cb3,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 9005220659495641023}
@@ -2856,35 +2833,6 @@ PrefabInstance:
       propertyPath: pausedMenu
       value: 
       objectReference: {fileID: 584723583}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelGreen
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: 10bb0fc570e3db046b0de5baefb58306,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelWhite
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: fcaaf828886e53943b22a8d9361fc523,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelPrefab
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: fcaaf828886e53943b22a8d9361fc523,
-        type: 3}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: pixelsParent
-      value: 
-      objectReference: {fileID: 127627898}
-    - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
-        type: 3}
-      propertyPath: voxelMagenta
-      value: 
-      objectReference: {fileID: 3399251440707562350, guid: 38c9bc440ededd046a5d2d809d84f9c4,
-        type: 3}
     - target: {fileID: 4047084109743400428, guid: 9786c29f69b8e5c47affdce521d8fd35,
         type: 3}
       propertyPath: voxelsParent
