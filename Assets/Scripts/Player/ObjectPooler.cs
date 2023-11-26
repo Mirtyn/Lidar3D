@@ -23,17 +23,18 @@ public class ObjectPooler : ProjectBehaviour
             GameObject obj = Instantiate(pooledObject);
             obj.SetActive(false);
             Player.Instance.voxels.Add(obj);
+            Player.Instance.Voxels.Add(new Player.VoxelObject {  GameObject = obj, Pixel = obj.GetComponent<Pixel>() });
             pooledObjects.Add(obj);
         }
     }
 
     public GameObject GetPooledObject()
     {
-        for (int i = 0; i < pooledObjects.Count; i++)
+        foreach (GameObject i in pooledObjects)
         {
-            if (!pooledObjects[i].activeInHierarchy)
+            if (!i.activeInHierarchy)
             {
-                return pooledObjects[i];
+                return i;
             }
         }
 
@@ -42,6 +43,7 @@ public class ObjectPooler : ProjectBehaviour
             GameObject obj = Instantiate(pooledObject);
             pooledObjects.Add(obj);
             Player.Instance.voxels.Add(obj);
+            Player.Instance.Voxels.Add(new Player.VoxelObject { GameObject = obj, Pixel = obj.GetComponent<Pixel>() });
             return obj;
         }
 

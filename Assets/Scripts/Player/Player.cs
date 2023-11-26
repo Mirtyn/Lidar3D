@@ -25,7 +25,15 @@ public class Player : ProjectBehaviour
 
     [SerializeField] GameObject voxelPrefab;
 
+    public class VoxelObject
+    {
+        public GameObject GameObject { get; set; }
+        public Pixel Pixel { get; set; }
+    }
+
     public List<GameObject> voxels = new List<GameObject>();
+    public List<VoxelObject> Voxels = new List<VoxelObject>();
+
     public static List<GameObject> flashLightVoxels = new List<GameObject>();
 
     bool drawPictureNextFixedUpdate = false;
@@ -65,8 +73,8 @@ public class Player : ProjectBehaviour
     [SerializeField] private GameObject pausedMenu;
     public GameObject Lights;
 
-    private float timeBetweenFlashUpdate = 0.2f;
-    private float timeBetweenFlashUpdateDelta;
+    //private float timeBetweenFlashUpdate = 0.2f;
+    //private float timeBetweenFlashUpdateDelta;
 
     private void OnCollisionStay(Collision collision)
     {
@@ -102,7 +110,7 @@ public class Player : ProjectBehaviour
 
     private void Awake()
     {
-        timeBetweenFlashUpdateDelta = timeBetweenFlashUpdate;
+        //timeBetweenFlashUpdateDelta = timeBetweenFlashUpdate;
 
         Instance = this;
 
@@ -414,12 +422,12 @@ public class Player : ProjectBehaviour
         //string g = Time.realtimeSinceStartupAsDouble.ToString();
         //Debug.Log("g = " + g);
 
-        for (int i = 0; i < vectors.Count; i++)
+        foreach (Vector2 i in vectors)
         {
             //string g = Time.realtimeSinceStartupAsDouble.ToString();
             //Debug.Log("g = " + g);
 
-            Vector3 pos = vectors[i];
+            Vector3 pos = i;
             Ray ray = mainCamera.ScreenPointToRay(pos);
 
             List<RaycastHit> hit = new List<RaycastHit>();
@@ -477,14 +485,42 @@ public class Player : ProjectBehaviour
     //    }
     //}
 
+    //private void RemoveFlashLightVoxels()
+    //{
+    //    List<GameObject> flashLightsVoxels = new List<GameObject>();
+
+    //    foreach (GameObject g in voxels)
+    //    {
+    //        if (g.GetComponent<Pixel>().Permanent == false && g.activeInHierarchy)
+    //        {
+    //            flashLightsVoxels.Add(g);
+    //        }
+    //    }
+
+    //    foreach (GameObject i in flashLightsVoxels)
+    //    {
+    //        i.SetActive(false);
+    //    }
+    //}
+
     private void RemoveFlashLightVoxels()
     {
-        List<GameObject> flashLightsVoxels = voxels.FindAll(g => g.GetComponent<Pixel>().Permanent == false);
+        //foreach (var v in voxels.Where(g => g.GetComponent<Pixel>().Permanent == false))
+        //{
+        //    v.SetActive(false);
+        //}
 
-        for (int i = 0; i < flashLightsVoxels.Count; i++)
+        foreach (var v in Voxels.Where(g => g.Pixel.Permanent == false))
         {
-            flashLightsVoxels[i].SetActive(false);
+            v.GameObject.SetActive(false);
         }
+
+        //List<GameObject> flashLightsVoxels = voxels.FindAll(g => g.GetComponent<Pixel>().Permanent == false);
+
+        //for (int i = 0; i < flashLightsVoxels.Count; i++)
+        //{
+        //    flashLightsVoxels[i].SetActive(false);
+        //}
     }
 
     private List<Vector2> DrawCircleWithPoints(int pointsInRing, double radius, Vector2 center)
@@ -781,54 +817,56 @@ public class Player : ProjectBehaviour
 
             if (hit.Count >= 2)
             {
-                for (int i = 0; i < hit.Count; i++)
+                foreach (RaycastHit i in hit)
                 {
-                    if (hit[i].transform.CompareTag(PUSHEABLE_OBJECT_TAG))
+                    Transform t = i.transform;
+
+                    if (t.CompareTag(PUSHEABLE_OBJECT_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
                             voxelColour = Pixel._VoxelColour.Blue;
                         }
-                        raycastHitTrigger = hit[i];
+                        raycastHitTrigger = i;
                         break;
                     }
-                    else if (hit[i].transform.CompareTag(BUTTON_TAG))
+                    else if (t.CompareTag(BUTTON_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
                             voxelColour = Pixel._VoxelColour.Magenta;
                         }
-                        raycastHitTrigger = hit[i];
+                        raycastHitTrigger = i;
                         break;
                     }
-                    else if (hit[i].transform.CompareTag(ENEMY_TAG))
+                    else if (t.CompareTag(ENEMY_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
                             voxelColour = Pixel._VoxelColour.Red;
                         }
                     }
-                    else if (hit[i].transform.CompareTag(DOOR_TAG))
+                    else if (t.CompareTag(DOOR_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
                             voxelColour = Pixel._VoxelColour.Gray;
                         }
-                        raycastHitTrigger = hit[i];
+                        raycastHitTrigger = i;
                         break;
                     }
-                    else if (hit[i].transform.CompareTag(MOVING_PLATFORM_TAG))
+                    else if (t.CompareTag(MOVING_PLATFORM_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
                             voxelColour = Pixel._VoxelColour.Green;
                         }
-                        raycastHitTrigger = hit[i];
+                        raycastHitTrigger = i;
                         break;
                     }
                     else
                     {
-                        raycastHitTrigger = hit[i];
+                        raycastHitTrigger = i;
                         break;
                     }
                 }
@@ -841,13 +879,29 @@ public class Player : ProjectBehaviour
     private void DrawVoxel(RaycastHit hit, Pixel._VoxelColour voxelColour, bool permanent)
     {
         Vector3 pos = new Vector3((float)Math.Round(hit.point.x, 1), (float)Math.Round(hit.point.y, 1), (float)Math.Round(hit.point.z, 1));
-      
-        GameObject go = voxels.SingleOrDefault<GameObject>(g => g.transform.position == pos && g.activeInHierarchy && g.GetComponent<Pixel>().Permanent);
+
+        GameObject go = null;
+        foreach (var v in Voxels)
+        {
+            if (v.GameObject.transform.position == pos && v.GameObject.activeInHierarchy && v.Pixel.Permanent)
+            {
+                go = v.GameObject; 
+
+                break;
+            }
+        }
+        //foreach (GameObject g in voxels)
+        //{
+        //    if (g.transform.position == pos && g.activeInHierarchy && g.GetComponent<Pixel>().Permanent)
+        //    {
+        //        go = g;
+        //        break;
+        //    }
+        //}
 
         if (!permanent)
         {
             //GameObject voxel = Instantiate(voxelPrefab, pos, Quaternion.identity);
-
 
             GameObject voxel = ObjectPooler.current.GetPooledObject();
 
@@ -855,17 +909,19 @@ public class Player : ProjectBehaviour
             voxel.transform.position = pos;
             voxel.transform.rotation = Quaternion.identity;
 
-
             voxel.SetActive(true);
 
             var p = voxel.GetComponent<Pixel>();
-            //p.VoxelColour = voxelColour;
-            //p.SetMaterial();
+            p.VoxelColour = voxelColour;
+            p.SetMaterial();
             //p.Parent = hit.transform;
             //p.Offset = pos - hit.transform.position;
             //p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
             p.Permanent = false;
+
+            return;
         }
+
         if (go == null)
         {
             GameObject voxel = ObjectPooler.current.GetPooledObject();
