@@ -226,6 +226,12 @@ MonoBehaviour:
     type: 3}
   pooledAmount: 5000
   willGrow: 1
+--- !u!1 &129272636 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5466200464854293257, guid: e7d2d4f34566b9b4fa7427dec49378fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 2091715687}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &276795732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2037,6 +2043,16 @@ PrefabInstance:
       propertyPath: audioObject
       value: 
       objectReference: {fileID: 6715396629253521046}
+    - target: {fileID: 2508354977651747114, guid: e7d2d4f34566b9b4fa7427dec49378fd,
+        type: 3}
+      propertyPath: audioObject
+      value: 
+      objectReference: {fileID: 6715396629253521046}
+    - target: {fileID: 4543406743050384818, guid: e7d2d4f34566b9b4fa7427dec49378fd,
+        type: 3}
+      propertyPath: audioObject
+      value: 
+      objectReference: {fileID: 6715396629253521046}
     - target: {fileID: 4646269854784944164, guid: e7d2d4f34566b9b4fa7427dec49378fd,
         type: 3}
       propertyPath: audioObject
@@ -2421,6 +2437,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Finish
       objectReference: {fileID: 0}
+    - target: {fileID: 8771018737295550983, guid: 23a1c5caa2fd2d248926c78e2d8f5a76,
+        type: 3}
+      propertyPath: FinishScreen
+      value: 
+      objectReference: {fileID: 129272636}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

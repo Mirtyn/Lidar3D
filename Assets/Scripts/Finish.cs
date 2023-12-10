@@ -3,25 +3,26 @@ using UnityEngine;
 
 public class Finish : ProjectBehaviour
 {
+    public static Finish Current;
     private GameObject player;
-    [SerializeField] private int level = 0;
+    public int Level = 0;
+    [SerializeField] GameObject FinishScreen;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        Current = this;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == player)
         {
-            LevelCompleted(level);
-            LoadNextSceneInBuildIndex();
+            FinishScreen.SetActive(true);
         }
         else if (other.transform.parent == player)
         {
-            LevelCompleted(level);
-            LoadNextSceneInBuildIndex();
+            FinishScreen.SetActive(true);
         }
     }
 }

@@ -32,6 +32,15 @@ public class Pixel : ProjectBehaviour
     private float maxTime = 30f;
     private float ATime = 0f;
     private Renderer renderer;
+    private bool fadePixel = false;
+    private float lowerAmount = 0f;
+    private Vector3 moveDir = Vector3.zero;
+
+    public float ChangeDirDelta = 0f;
+    public float MaxChangeDirDelta;
+
+    private float minChangeDir = 0.37f;
+    private float maxChangeDir = 0.68f;
 
     private void OnEnable()
     {
@@ -41,6 +50,10 @@ public class Pixel : ProjectBehaviour
         MaxTimeDelta = UnityEngine.Random.Range(minTime, maxTime);
         TimeDelta = ATime;
         renderer = pixelVisualTransform.GetComponent<Renderer>();
+        fadePixel = false;
+        lowerAmount = 0f;
+        ChangeDirDelta = 0f;
+        MaxChangeDirDelta = UnityEngine.Random.Range(minChangeDir, maxChangeDir);
     }
 
     public void SetMaterial()
@@ -87,19 +100,38 @@ public class Pixel : ProjectBehaviour
 
             if (TimeDelta > MaxTimeDelta)
             {
+                fadePixel = true;
                 TimeDelta -= UnityEngine.Random.Range(2f, 5f);
 
-                glitchColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0.4f, 1.2f));
+                //glitchColor = new Color(renderer.material.color.r + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.g + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.b + UnityEngine.Random.Range(-0.2f, 0.2f));
+                glitchColor = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b);
                 renderer.material.color = glitchColor;
-                renderer.material.SetColor("_EmissionColor", glitchColor);
+                renderer.material.SetColor("_EmissionColor", glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount));
+            }
+
+            if(fadePixel)
+            {
+                lowerAmount += Time.deltaTime / 7.75f;
+                renderer.material.SetColor("_EmissionColor", glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount));
+
+                if (renderer.material.GetColor("_EmissionColor").r <= 0 && renderer.material.GetColor("_EmissionColor").g <= 0 && renderer.material.GetColor("_EmissionColor").b <= 0)
+                {
+                    this.gameObject.SetActive(false);
+                }
+
+                this.transform.Translate(moveDir.normalized * Time.deltaTime);
+
+                ChangeDirDelta += Time.deltaTime;
+            }
+
+            if (ChangeDirDelta > MaxChangeDirDelta)
+            {
+                ChangeDirDelta = 0;
+                MaxChangeDirDelta = UnityEngine.Random.Range(minChangeDir, maxChangeDir);
+                moveDir = new Vector3(UnityEngine.Random.Range(-1f, 1f) * lowerAmount, -Mathf.Pow(lowerAmount, 3f) -(lowerAmount / 2), UnityEngine.Random.Range(-1f, 1f) * lowerAmount);
             }
         }
     }
-
-    //public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-    //{
-    //    return Quaternion.Euler(angles) * (point - pivot) + pivot;
-    //}
 }
 
 //private void Update()
