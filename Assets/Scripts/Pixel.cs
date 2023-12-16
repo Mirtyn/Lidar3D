@@ -119,17 +119,17 @@ public class Pixel : ProjectBehaviour
                     this.gameObject.SetActive(false);
                 }
 
-                this.transform.Translate(moveDir.normalized * Time.deltaTime);
+                //this.transform.Translate(moveDir.normalized * Time.deltaTime);
 
-                ChangeDirDelta += Time.deltaTime;
+                //ChangeDirDelta += Time.deltaTime;
             }
 
-            if (ChangeDirDelta > MaxChangeDirDelta)
-            {
-                ChangeDirDelta = 0;
-                MaxChangeDirDelta = UnityEngine.Random.Range(minChangeDir, maxChangeDir);
-                moveDir = new Vector3(UnityEngine.Random.Range(-1f, 1f) * lowerAmount, -Mathf.Pow(lowerAmount, 3f) -(lowerAmount / 2), UnityEngine.Random.Range(-1f, 1f) * lowerAmount);
-            }
+            //if (ChangeDirDelta > MaxChangeDirDelta)
+            //{
+            //    ChangeDirDelta = 0;
+            //    MaxChangeDirDelta = UnityEngine.Random.Range(minChangeDir, maxChangeDir);
+            //    moveDir = new Vector3(UnityEngine.Random.Range(-1f, 1f) * lowerAmount, -Mathf.Pow(lowerAmount, 3f) -(lowerAmount / 2), UnityEngine.Random.Range(-1f, 1f) * lowerAmount);
+            //}
         }
     }
 }
