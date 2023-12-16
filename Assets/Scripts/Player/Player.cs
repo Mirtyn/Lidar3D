@@ -14,6 +14,8 @@ public class Player : ProjectBehaviour
     private const string PUSHEABLE_OBJECT_TAG = "PusheableObject";
     private const string BUTTON_TAG = "Button";
     private const string DOOR_TAG = "Door";
+    private const string HAZARD_TAG = "Hazard";
+    private const string GLASS_TAG = "Glass";
     private const string ENEMY_TAG = "Enemy";
     private const string MOVING_PLATFORM_TAG = "MovingPlatform";
 
@@ -85,6 +87,11 @@ public class Player : ProjectBehaviour
                 Health -= DamageASec * Time.deltaTime;
             }
 
+            if (collision.transform.CompareTag("Hazard"))
+            {
+                Health -= DamageASec * Time.deltaTime;
+            }
+
             if (collision.transform.CompareTag("DeathZone"))
             {
                 Health -= DamageASec * 2.5f * Time.deltaTime;
@@ -97,6 +104,11 @@ public class Player : ProjectBehaviour
         if (!Game.GamePaused)
         {
             if (other.transform.CompareTag("Enemy"))
+            {
+                Health -= DamageASec * Time.deltaTime;
+            }
+
+            if (other.transform.CompareTag("Hazard"))
             {
                 Health -= DamageASec * Time.deltaTime;
             }
@@ -821,7 +833,21 @@ public class Player : ProjectBehaviour
                 {
                     Transform t = i.transform;
 
-                    if (t.CompareTag(PUSHEABLE_OBJECT_TAG))
+                    if (t.CompareTag(GLASS_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Blue;
+                        }
+                    }
+                    else if (t.CompareTag(HAZARD_TAG))
+                    {
+                        if (voxelColour == Pixel._VoxelColour.White)
+                        {
+                            voxelColour = Pixel._VoxelColour.Red;
+                        }
+                    }
+                    else if (t.CompareTag(PUSHEABLE_OBJECT_TAG))
                     {
                         if (voxelColour == Pixel._VoxelColour.White)
                         {
@@ -845,6 +871,8 @@ public class Player : ProjectBehaviour
                         {
                             voxelColour = Pixel._VoxelColour.Red;
                         }
+                        raycastHitTrigger = i;
+                        break;
                     }
                     else if (t.CompareTag(DOOR_TAG))
                     {

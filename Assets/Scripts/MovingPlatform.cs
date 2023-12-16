@@ -19,6 +19,8 @@ public class MovingPlatform : ProjectBehaviour
     [SerializeField] private bool forcePlayOnStart = false;
     [SerializeField] private float forceStartValue = 0f;
     [SerializeField] private float maxDelay = 5f;
+    [SerializeField] private float stopTime = 1.5f;
+    private bool stopped = false;
 
     private void Awake()
     {
@@ -32,7 +34,7 @@ public class MovingPlatform : ProjectBehaviour
             rndNum = Random.Range(0f, maxDelay);
         }
 
-        Invoke("Play", rndNum);
+        Invoke(nameof(Play), rndNum);
 
         startPoint.SetActive(false);
         endPoint.SetActive(false);
@@ -48,41 +50,35 @@ public class MovingPlatform : ProjectBehaviour
     {
         if (!Game.GamePaused)
         {
-            var target = dir ? endPoint : startPoint;
-
-            var prevPos = this.transform.position;
-
-            this.transform.position = Vector3.MoveTowards(this.transform.position, target.transform.position, moveSpeed * Time.deltaTime);
-
-            var nextPos = this.transform.position;
-            diffrence = nextPos - prevPos;
-
-            if (this.transform.position == target.transform.position)
+            if (!stopped)
             {
-                dir = !dir;
-            }
+                var target = dir ? endPoint : startPoint;
 
-            if (playerInside)
-            {
-                playerCharacterController.Move(diffrence);
+                var prevPos = this.transform.position;
+
+                this.transform.position = Vector3.MoveTowards(this.transform.position, target.transform.position, moveSpeed * Time.deltaTime);
+
+                var nextPos = this.transform.position;
+                diffrence = nextPos - prevPos;
+
+                if (this.transform.position == target.transform.position)
+                {
+                    stopped = true;
+                    Invoke(nameof(ChangeDir), stopTime);
+                }
+
+                if (playerInside)
+                {
+                    playerCharacterController.Move(diffrence);
+                }
             }
         }
     }
 
-    public void OpenDoor()
+    private void ChangeDir()
     {
-        if (!Game.GamePaused)
-        {
-            dir = true;
-        }
-    }
-
-    public void CloseDoor()
-    {
-        if (!Game.GamePaused)
-        {
-            dir = false;
-        }
+        dir = !dir;
+        stopped = false;
     }
 
     private void OnTriggerEnter(Collider other)

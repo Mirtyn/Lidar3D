@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Pixel;
 using Random = UnityEngine.Random;
 
 public class MainMenuCamera : ProjectBehaviour
@@ -15,11 +15,7 @@ public class MainMenuCamera : ProjectBehaviour
 
     [SerializeField] Transform pixelsParent;
 
-    [SerializeField] private GameObject pixelWhite;
-    [SerializeField] private GameObject pixelMagenta;
-    [SerializeField] private GameObject pixelBlue;
-    [SerializeField] private GameObject pixelRed;
-    [SerializeField] private GameObject pixelGray;
+    [SerializeField] private GameObject Voxel;
 
     private void Awake()
     {
@@ -68,21 +64,7 @@ public class MainMenuCamera : ProjectBehaviour
 
             //DrawPixel(hit, Pixel._PixelColour.White);
 
-            if (hit.Count == 1)
-            {
-                DrawPixel(hit[0], pixelColour);
-            }
-
-            if (hit.Count >= 2)
-            {
-                for (int i = 0; i < hit.Count; i++)
-                {
-                    raycastHitTrigger = hit[i];
-                    break;
-                }
-
-                DrawPixel(raycastHitTrigger, pixelColour);
-            }
+            DrawPixel(hit[0], pixelColour);
         }
     }
 
@@ -94,43 +76,85 @@ public class MainMenuCamera : ProjectBehaviour
 
         int g = Random.Range(0, 500);
 
-        GameObject pixelPrefab;
+        Pixel._VoxelColour voxelColour;
 
-        if (g >= 5)
+        voxelColour = g switch
         {
-            pixelPrefab = pixelWhite;
-        }
-        else
-        {
-            pixelPrefab = g switch
-            {
-                > 3 => pixelWhite,
-                > 2 => pixelRed,
-                > 1 => pixelMagenta,
-                > 0 => pixelBlue,
-                _ => pixelGray
-            };
-        }
-        
+            4 => _VoxelColour.Red,
+            3 => _VoxelColour.Blue,
+            2 => _VoxelColour.Gray,
+            1 => _VoxelColour.Green,
+            0 => _VoxelColour.Magenta,
+            _ => _VoxelColour.White
+        };
+
         if (go == null)
         {
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+            GameObject i = Instantiate(Voxel, pos, Quaternion.identity, pixelsParent);
+
+            i.transform.position = pos;
+            i.transform.rotation = Quaternion.identity;
+
             var p = i.GetComponent<Pixel>();
+            p.VoxelColour = voxelColour;
+            p.SetMaterial();
             p.Parent = hit.transform;
             p.Offset = pos - hit.transform.position;
             p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+
             pixels.Add(i);
+            //i.transform.localScale = new Vector3(1 / hit.transform.localScale.x, 1 / hit.transform.localScale.y, 1 / hit.transform.localScale.z);
+
+            //var pixel = i.GetComponent<Pixel>();
+
+            //pixel.Parent = hit.transform;
         }
-        else if (go.GetComponent<Pixel>().VoxelColour != pixelColour)
+        else if (go.GetComponent<Pixel>().VoxelColour != voxelColour)
         {
             Destroy(go);
             pixels.Remove(go);
-            GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+
+            go.SetActive(false);
+
+            GameObject i = Instantiate(Voxel, pos, Quaternion.identity, pixelsParent);
+
+            i.transform.position = pos;
+            i.transform.rotation = Quaternion.identity;
+
             var p = i.GetComponent<Pixel>();
+            p.VoxelColour = voxelColour;
+            p.SetMaterial();
             p.Parent = hit.transform;
             p.Offset = pos - hit.transform.position;
             p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+
             pixels.Add(i);
+            //i.transform.localScale = new Vector3(i.transform.localScale.x / hit.transform.localScale.x, i.transform.localScale.y / hit.transform.localScale.y, i.transform.localScale.z / hit.transform.localScale.z);
+
+            //var pixel = i.GetComponent<Pixel>();
+
+            //pixel.Parent = hit.transform;
         }
+
+        //if (go == null)
+        //{
+        //    GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+        //    var p = i.GetComponent<Pixel>();
+        //    p.Parent = hit.transform;
+        //    p.Offset = pos - hit.transform.position;
+        //    p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+        //    pixels.Add(i);
+        //}
+        //else if (go.GetComponent<Pixel>().VoxelColour != pixelColour)
+        //{
+        //    Destroy(go);
+        //    pixels.Remove(go);
+        //    GameObject i = Instantiate(pixelPrefab, pos, Quaternion.identity, pixelsParent);
+        //    var p = i.GetComponent<Pixel>();
+        //    p.Parent = hit.transform;
+        //    p.Offset = pos - hit.transform.position;
+        //    p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+        //    pixels.Add(i);
+        //}
     }
 }

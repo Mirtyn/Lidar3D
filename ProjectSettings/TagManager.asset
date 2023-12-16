@@ -11,6 +11,9 @@ TagManager:
   - Door
   - DeathZone
   - MovingPlatform
+  - FinishScreen
+  - Hazard
+  - Glass
   layers:
   - Default
   - TransparentFX

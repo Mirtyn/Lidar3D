@@ -121,6 +121,7 @@ public class SaveGame
     {
         false,
         false,
+        false,
         false
     };
 }

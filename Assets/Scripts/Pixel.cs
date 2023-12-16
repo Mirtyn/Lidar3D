@@ -104,8 +104,8 @@ public class Pixel : ProjectBehaviour
                 TimeDelta -= UnityEngine.Random.Range(2f, 5f);
 
                 //glitchColor = new Color(renderer.material.color.r + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.g + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.b + UnityEngine.Random.Range(-0.2f, 0.2f));
-                glitchColor = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b);
-                renderer.material.color = glitchColor;
+                glitchColor = renderer.material.GetColor("_EmissionColor");
+                renderer.material.color = glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount);
                 renderer.material.SetColor("_EmissionColor", glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount));
             }
 
