@@ -162,6 +162,7 @@ MonoBehaviour:
   forcePlayOnStart: 0
   forceStartValue: 0
   maxDelay: 5
+  stopTime: 1.5
 --- !u!1 &1028040388505331035
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,47 +556,47 @@ AudioSource:
     - serializedVersion: 3
       time: 0.095393375
       value: 0.8750702
-      inSlope: -0.11262937
-      outSlope: -0.11262937
+      inSlope: -0.14908352
+      outSlope: -0.14908352
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.16830826
+      outWeight: 0.29136774
     - serializedVersion: 3
-      time: 0.6941894
-      value: 0.7323723
-      inSlope: -0.97968507
-      outSlope: -0.97968507
+      time: 0.35916746
+      value: 0.7507744
+      inSlope: -1.5564605
+      outSlope: -1.5564605
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.18358216
-      outWeight: 0
+      outWeight: 0.6497983
     - serializedVersion: 3
-      time: 0.8183484
-      value: 0.48848546
-      inSlope: -2.9396548
-      outSlope: -2.9396548
+      time: 0.65834475
+      value: 0.2456876
+      inSlope: -2.094174
+      outSlope: -2.094174
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.59410125
-      outWeight: 0.23888132
+      inWeight: 0.3785534
+      outWeight: 1
     - serializedVersion: 3
-      time: 0.88270265
-      value: 0.24914551
-      inSlope: -1.452075
-      outSlope: -1.452075
+      time: 0.7501648
+      value: 0
+      inSlope: -0.8976586
+      outSlope: -0.8976586
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.74607587
       outWeight: 0.3620263
     - serializedVersion: 3
       time: 1
-      value: 0.11090088
-      inSlope: -0.20007975
-      outSlope: -0.20007975
+      value: 0
+      inSlope: 1.4715712
+      outSlope: 1.4715712
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.17011222
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -620,7 +621,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.175
+      value: 0.18235473
       inSlope: 0
       outSlope: 0
       tangentMode: 0

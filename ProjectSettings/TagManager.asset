@@ -14,6 +14,7 @@ TagManager:
   - FinishScreen
   - Hazard
   - Glass
+  - TeleportParticleEffect
   layers:
   - Default
   - TransparentFX

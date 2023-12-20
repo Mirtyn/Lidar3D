@@ -84,7 +84,7 @@ public class Player : ProjectBehaviour
         {
             if (collision.transform.CompareTag("Enemy"))
             {
-                Health -= DamageASec * Time.deltaTime;
+                Health -= DamageASec * 1.2f * Time.deltaTime;
             }
 
             if (collision.transform.CompareTag("Hazard"))
@@ -94,7 +94,7 @@ public class Player : ProjectBehaviour
 
             if (collision.transform.CompareTag("DeathZone"))
             {
-                Health -= DamageASec * 2.5f * Time.deltaTime;
+                Health -= DamageASec * 2.75f * Time.deltaTime;
             }
         }
     }
@@ -105,7 +105,7 @@ public class Player : ProjectBehaviour
         {
             if (other.transform.CompareTag("Enemy"))
             {
-                Health -= DamageASec * Time.deltaTime;
+                Health -= DamageASec * 1.2f * Time.deltaTime;
             }
 
             if (other.transform.CompareTag("Hazard"))
@@ -115,7 +115,7 @@ public class Player : ProjectBehaviour
 
             if (other.transform.CompareTag("DeathZone"))
             {
-                Health -= DamageASec * 2.5f * Time.deltaTime;
+                Health -= DamageASec * 2.75f * Time.deltaTime;
             }
         }
     }
@@ -973,7 +973,7 @@ public class Player : ProjectBehaviour
 
             //pixel.Parent = hit.transform;
         }
-        else if (go.GetComponent<Pixel>().VoxelColour != voxelColour)
+        else
         {
             go.SetActive(false);
 

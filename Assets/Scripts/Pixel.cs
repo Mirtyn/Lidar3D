@@ -98,20 +98,22 @@ public class Pixel : ProjectBehaviour
 
             TimeDelta += Time.deltaTime;
 
-            if (TimeDelta > MaxTimeDelta)
+            if (TimeDelta > MaxTimeDelta && !fadePixel)
             {
                 fadePixel = true;
-                TimeDelta -= UnityEngine.Random.Range(2f, 5f);
+                //TimeDelta -= UnityEngine.Random.Range(2f, 5f);
 
                 //glitchColor = new Color(renderer.material.color.r + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.g + UnityEngine.Random.Range(-0.2f, 0.2f), renderer.material.color.b + UnityEngine.Random.Range(-0.2f, 0.2f));
                 glitchColor = renderer.material.GetColor("_EmissionColor");
-                renderer.material.color = glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount);
+                //renderer.material.color = glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount);
                 renderer.material.SetColor("_EmissionColor", glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount));
             }
 
             if(fadePixel)
             {
-                lowerAmount += Time.deltaTime / 7.75f;
+                lowerAmount += Time.deltaTime / 5.8f;
+
+                //renderer.material.color = glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount);
                 renderer.material.SetColor("_EmissionColor", glitchColor - new Color(lowerAmount, lowerAmount, lowerAmount));
 
                 if (renderer.material.GetColor("_EmissionColor").r <= 0 && renderer.material.GetColor("_EmissionColor").g <= 0 && renderer.material.GetColor("_EmissionColor").b <= 0)
@@ -157,4 +159,3 @@ public class Pixel : ProjectBehaviour
 
 //    this.transform.eulerAngles = Vector3.zero;
 //}
-

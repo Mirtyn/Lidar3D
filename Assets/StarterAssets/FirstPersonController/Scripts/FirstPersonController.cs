@@ -80,7 +80,7 @@ namespace StarterAssets
 
 		public float TimeFalling = 0.0f;
 
-		[SerializeField] private float minTimeFallingBeforePlayLandingSound = 0.13f;
+		private float minTimeFallingBeforePlayLandingSound = 0.085f;
 
         [SerializeField] private float playerFootStepSoundDelay = 10f;
         [SerializeField] private float currentPlayerFootStepSoundDelay;

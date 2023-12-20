@@ -9,7 +9,7 @@ public class ProjectBehaviour : MonoBehaviour
     public static SaveGame currentSaveGameData = new SaveGame();
     public static float GameSpeed = 1.0f;
 
-    public static bool StickyVoxels = false;
+    public static bool StickyVoxels = true;
 
     public static void ApplicationStarted()
     {

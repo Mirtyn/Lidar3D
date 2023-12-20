@@ -43,11 +43,11 @@ public class MoveableObject : MonoBehaviour
 
     public void ObjectHeld()
     {
-        this.gameObject.GetComponent<Renderer>().material = heldMaterial;
+        //this.gameObject.GetComponent<Renderer>().material = heldMaterial;
     }
 
     public void ObjectLetGoOf()
     {
-        this.gameObject.GetComponent<Renderer>().material = normalMaterial;
+        //this.gameObject.GetComponent<Renderer>().material = normalMaterial;
     }
 }

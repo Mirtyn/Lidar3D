@@ -45,7 +45,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.425
+  m_Volume: 0.335
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -357,7 +357,6 @@ MonoBehaviour:
   TopClamp: 89
   BottomClamp: -89
   TimeFalling: 0
-  minTimeFallingBeforePlayLandingSound: 0.12
   playerFootStepSoundDelay: 1.6
   currentPlayerFootStepSoundDelay: 0
   feetAudioSource: {fileID: 1818258583443073250}
@@ -687,6 +686,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455430877959334236, guid: ec4c10b9df2f39643bb6108c9152df5f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6460054331068464414, guid: ec4c10b9df2f39643bb6108c9152df5f,
         type: 3}
