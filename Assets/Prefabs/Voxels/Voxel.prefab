@@ -53,12 +53,15 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c069772b8bcf7af45bb574b9994b264b, type: 2}
   - {fileID: 2100000, guid: a463f045fc6832a4fb4a90baddd54b8d, type: 2}
   - {fileID: 2100000, guid: 3e7daead4a7a6254b91ead9ac661f347, type: 2}
-  Permanent: 1
   VoxelColour: 0
   Parent: {fileID: 0}
   Offset: {x: 0, y: 0, z: 0}
   RotOffset: {x: 0, y: 0, z: 0, w: 0}
   VisualPositionWorldSpace: {x: 0, y: 0, z: 0}
+  TimeDelta: 0
+  MaxTimeDelta: 0
+  ChangeDirDelta: 0
+  MaxChangeDirDelta: 0
 --- !u!65 &7039245754883157284
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -106,13 +109,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5636133113094062855}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4548454859297903938}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &881339831296462483
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -120,7 +123,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5636133113094062855}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &8897444533984788040
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -129,7 +132,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5636133113094062855}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0

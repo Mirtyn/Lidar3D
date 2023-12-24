@@ -906,57 +906,38 @@ public class Player : ProjectBehaviour
 
     private void DrawVoxel(RaycastHit hit, Pixel._VoxelColour voxelColour)
     {
-        Vector3 pos = new Vector3((float)Math.Round(hit.point.x, 1), (float)Math.Round(hit.point.y, 1), (float)Math.Round(hit.point.z, 1));
+        Vector3 pos = new Vector3((float)Math.Round(hit.point.x, 1, MidpointRounding.AwayFromZero), (float)Math.Round(hit.point.y, 1, MidpointRounding.AwayFromZero), (float)Math.Round(hit.point.z, 1, MidpointRounding.AwayFromZero));
+        
+        Quaternion rot = new Quaternion();
+        if (hit.normal != Vector3.down)
+        {
+            rot = Quaternion.LookRotation(Vector3.ProjectOnPlane(Vector3.up, hit.normal), hit.normal);
+        }
+        else
+        {
+            rot.eulerAngles = new Vector3(-180f, 0f, 0f);
+        }
 
         GameObject go = null;
         foreach (var v in Voxels)
         {
-            if (v.GameObject.transform.position == pos && v.GameObject.activeInHierarchy)
+            if (v.GameObject.transform.position == pos && v.GameObject.activeInHierarchy && v.GameObject.transform.rotation == rot)
             {
                 go = v.GameObject; 
 
                 break;
             }
         }
-        //foreach (GameObject g in voxels)
-        //{
-        //    if (g.transform.position == pos && g.activeInHierarchy && g.GetComponent<Pixel>().Permanent)
-        //    {
-        //        go = g;
-        //        break;
-        //    }
-        //}
-
-        //if (!permanent)
-        //{
-        //    //GameObject voxel = Instantiate(voxelPrefab, pos, Quaternion.identity);
-
-        //    GameObject voxel = ObjectPooler.current.GetPooledObject();
-
-        //    if (voxel == null) { return; }
-        //    voxel.transform.position = pos;
-        //    voxel.transform.rotation = Quaternion.identity;
-
-        //    voxel.SetActive(true);
-
-        //    var p = voxel.GetComponent<Pixel>();
-        //    p.VoxelColour = voxelColour;
-        //    p.SetMaterial();
-        //    //p.Parent = hit.transform;
-        //    //p.Offset = pos - hit.transform.position;
-        //    //p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
-        //    p.Permanent = false;
-
-        //    return;
-        //}
 
         if (go == null)
         {
             GameObject voxel = ObjectPooler.current.GetPooledObject();
 
             if (voxel == null) { return; }
+
             voxel.transform.position = pos;
-            voxel.transform.rotation = Quaternion.identity;
+            voxel.transform.rotation = rot;
+            //voxel.transform.rotation = Quaternion.identity;
 
             voxel.SetActive(true);
 
@@ -966,6 +947,7 @@ public class Player : ProjectBehaviour
             p.Parent = hit.transform;
             p.Offset = pos - hit.transform.position;
             p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+            p.Rotation = rot.eulerAngles;
 
             //i.transform.localScale = new Vector3(1 / hit.transform.localScale.x, 1 / hit.transform.localScale.y, 1 / hit.transform.localScale.z);
 
@@ -980,8 +962,10 @@ public class Player : ProjectBehaviour
             GameObject voxel = ObjectPooler.current.GetPooledObject();
 
             if (voxel == null) { return; }
+
             voxel.transform.position = pos;
-            voxel.transform.rotation = Quaternion.identity;
+            voxel.transform.rotation = rot;
+            //voxel.transform.rotation = Quaternion.identity;
 
             voxel.SetActive(true);
 
@@ -991,6 +975,7 @@ public class Player : ProjectBehaviour
             p.Parent = hit.transform;
             p.Offset = pos - hit.transform.position;
             p.RotOffset = Quaternion.Inverse(Quaternion.identity * hit.transform.rotation);
+            p.Rotation = rot.eulerAngles;
 
             //i.transform.localScale = new Vector3(i.transform.localScale.x / hit.transform.localScale.x, i.transform.localScale.y / hit.transform.localScale.y, i.transform.localScale.z / hit.transform.localScale.z);
 

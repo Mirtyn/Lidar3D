@@ -22,6 +22,7 @@ public class Pixel : ProjectBehaviour
     public Transform Parent;
     public Vector3 Offset;
     public Quaternion RotOffset;
+    public Vector3 Rotation;
 
     private Transform pixelVisualTransform;
     public Vector3 VisualPositionWorldSpace;
@@ -34,7 +35,6 @@ public class Pixel : ProjectBehaviour
     private Renderer renderer;
     private bool fadePixel = false;
     private float lowerAmount = 0f;
-    private Vector3 moveDir = Vector3.zero;
 
     public float ChangeDirDelta = 0f;
     public float MaxChangeDirDelta;
@@ -84,16 +84,18 @@ public class Pixel : ProjectBehaviour
                 // Move the child back to the reference location
                 this.transform.Translate(Offset);
 
-                pixelVisualTransform.position = VisualPositionWorldSpace;
+                this.transform.eulerAngles = Rotation + Parent.eulerAngles;
 
-                Vector3 pos = new Vector3((float)Math.Round(this.transform.position.x, 1), (float)Math.Round(this.transform.position.y, 1), (float)Math.Round(this.transform.position.z, 1));
+                //this.transform.rotation = Rotation * Parent.rotation;
 
-                if (VisualPositionWorldSpace != pos)
-                {
-                    VisualPositionWorldSpace = pos;
-                }
+                //pixelVisualTransform.position = VisualPositionWorldSpace;
 
-                pixelVisualTransform.eulerAngles = Vector3.zero;
+                //Vector3 pos = new Vector3((float)Math.Round(this.transform.position.x, 1, MidpointRounding.AwayFromZero), (float)Math.Round(this.transform.position.y, 1, MidpointRounding.AwayFromZero), (float)Math.Round(this.transform.position.z, 1, MidpointRounding.AwayFromZero));
+
+                //if (VisualPositionWorldSpace != pos)
+                //{
+                //    VisualPositionWorldSpace = pos;
+                //}
             }
 
             TimeDelta += Time.deltaTime;
