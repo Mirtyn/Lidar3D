@@ -53,8 +53,8 @@ public class Player : ProjectBehaviour
     RaycastHit lastHitObject;
 
     [SerializeField] private VolumeProfile volumeProfile;
-    private URPGlitch.Runtime.AnalogGlitch.AnalogGlitchVolume analogGlitchVolume;
-    private URPGlitch.Runtime.DigitalGlitch.DigitalGlitchVolume digitalGlitchVolume;
+    //private URPGlitch.Runtime.AnalogGlitch.AnalogGlitchVolume analogGlitchVolume;
+    //private URPGlitch.Runtime.DigitalGlitch.DigitalGlitchVolume digitalGlitchVolume;
 
     float maxDigitalGlitchValue = 0.1f;
 
@@ -132,21 +132,21 @@ public class Player : ProjectBehaviour
 
         Health = MaxHealth;
 
-        if (!volumeProfile.TryGet(out analogGlitchVolume))
-        {
-            Debug.Log("None found");
-        }
+        //if (!volumeProfile.TryGet(out analogGlitchVolume))
+        //{
+        //    Debug.Log("None found");
+        //}
 
-        if (!volumeProfile.TryGet(out digitalGlitchVolume))
-        {
-            Debug.Log("None found");
-        }
+        //if (!volumeProfile.TryGet(out digitalGlitchVolume))
+        //{
+        //    Debug.Log("None found");
+        //}
 
-        digitalGlitchVolume.intensity.Override(0);
-        analogGlitchVolume.colorDrift.Override(0);
-        analogGlitchVolume.horizontalShake.Override(0);
-        analogGlitchVolume.scanLineJitter.Override(0);
-        analogGlitchVolume.verticalJump.Override(0);
+        //digitalGlitchVolume.intensity.Override(0);
+        //analogGlitchVolume.colorDrift.Override(0);
+        //analogGlitchVolume.horizontalShake.Override(0);
+        //analogGlitchVolume.scanLineJitter.Override(0);
+        //analogGlitchVolume.verticalJump.Override(0);
 
         //analogGlitchVolume = volumeProfile.components[0];
         //digitalGlitchVolume = volumeProfile.components[1];
@@ -292,32 +292,32 @@ public class Player : ProjectBehaviour
 
         float h = MathF.Abs((Health - MaxHealth) * b);
 
-        digitalGlitchVolume.intensity.Override((maxDigitalGlitchValue / MaxHealth) * h);
+        //digitalGlitchVolume.intensity.Override((maxDigitalGlitchValue / MaxHealth) * h);
 
-        analogGlitchVolume.colorDrift.Override((maxColorDriftValue / MaxHealth) * h);
+        //analogGlitchVolume.colorDrift.Override((maxColorDriftValue / MaxHealth) * h);
 
-        if (Health > -50)
-        {
-            analogGlitchVolume.scanLineJitter.Override((maxScanLineJitterValue / MaxHealth) * h);
-        }
+        //if (Health > -50)
+        //{
+        //    analogGlitchVolume.scanLineJitter.Override((maxScanLineJitterValue / MaxHealth) * h);
+        //}
 
-        if (h >= 65f)
-        {
-            analogGlitchVolume.verticalJump.Override((maxVerticalJumpValue / MaxHealth) * h);
-        }
-        else
-        {
-            analogGlitchVolume.verticalJump.Override(0);
-        }
+        //if (h >= 65f)
+        //{
+        //    analogGlitchVolume.verticalJump.Override((maxVerticalJumpValue / MaxHealth) * h);
+        //}
+        //else
+        //{
+        //    analogGlitchVolume.verticalJump.Override(0);
+        //}
 
-        if (h >= 80f)
-        {
-            analogGlitchVolume.horizontalShake.Override((maxHorizontalShakeValue / MaxHealth) * h);
-        }
-        else
-        {
-            analogGlitchVolume.horizontalShake.Override(0);
-        }
+        //if (h >= 80f)
+        //{
+        //    analogGlitchVolume.horizontalShake.Override((maxHorizontalShakeValue / MaxHealth) * h);
+        //}
+        //else
+        //{
+        //    analogGlitchVolume.horizontalShake.Override(0);
+        //}
     }
 
     private void CheckForPlayerInput()

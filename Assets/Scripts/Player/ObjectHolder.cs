@@ -71,7 +71,7 @@ public class ObjectHolder : ProjectBehaviour
 
                 //
 
-                AttachedRigidbody.velocity *= procentScaler;
+                AttachedRigidbody.linearVelocity *= procentScaler;
                 AttachedRigidbody.angularVelocity *= procentScaler;
 
                 Vector3 force = Mathf.Lerp(minForce, maxForce, Vector3.Distance(this.transform.position, AttachedRigidbody.transform.position) / distanceDevider) * dir;

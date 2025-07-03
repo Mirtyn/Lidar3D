@@ -36,7 +36,7 @@ public class MoveableObject : MonoBehaviour
     {
         if (this.transform.position.y < maxDepth)
         {
-            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            this.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             this.transform.position = SpawnPoint;
         }
     }
